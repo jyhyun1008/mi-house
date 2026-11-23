@@ -58,7 +58,18 @@ Gallery, Board(클립), Diary는 오른쪽 **CATEGORY** 상자에 해시태그�
 /@아이디@서버            홈페이지 Top
 /@아이디@서버/gallery    …/pages, …/clips, …/diary, …/guestbook, …/about
 /@아이디@서버/admin      관리 (주인으로 로그인했을 때만)
+
+https://내도메인/        커스텀 도메인에서는 /@아이디@서버 없이 /gallery, /admin …
 ```
+
+## 커스텀 도메인
+
+주인은 **관리 → 도메인**에서 자기 도메인(`home.example.com`)을 등록하고, 거기 나오는 안내대로 Cloudflare Worker를 하나 만들면 돼요. 그러면 `https://home.example.com/gallery`처럼 내 도메인 주소로 홈페이지가 열려요.
+
+- Worker 코드는 관리 화면이 그 홈페이지에 맞춰 만들어 줘요(`app/utils/domain.ts`의 `workerScript`). 이 앱의 `_nuxt/` 파일은 그대로 넘겨주고, 나머지 주소에는 `index.html` 머리에 `<meta name="mi-house-site" content="@아이디@서버">`, `<meta name="mi-house-app" content="앱 주소">`를 붙여 보내요.
+- 앱은 이 meta를 보면 라우트에서 `/@아이디@서버`를 떼요(`app/router.options.ts`). 다른 사람 홈페이지나 처음 화면 링크는 앱 원래 주소로 가요.
+- 설정의 `customDomain`과 지금 도메인이 같을 때만 열려요. 남의 홈페이지를 자기 도메인에 걸어 둘 수 없어요.
+- 등록하면 배너의 Link 주소도 그 도메인으로 바뀌어요. 로그인 토큰은 도메인마다 따로 저장돼요.
 
 ## 서버 없이 동작하는 방식
 

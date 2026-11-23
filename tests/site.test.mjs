@@ -14,7 +14,8 @@ async function load(file, globals = {}) {
 
 const url = await load('url.ts')
 const misskey = await load('misskey.ts', { fetch: () => {}, AbortSignal })
-const site = await load('site.ts', { safeHttpUrl: url.safeHttpUrl, normalizeHost: misskey.normalizeHost })
+const domain = await load('domain.ts', { safeHttpUrl: url.safeHttpUrl })
+const site = await load('site.ts', { safeHttpUrl: url.safeHttpUrl, normalizeHost: misskey.normalizeHost, normalizeDomain: domain.normalizeDomain, domainSite: () => null })
 
 test('config round-trips through page blocks', () => {
   const c = site.defaultConfig('Jay')
@@ -122,4 +123,35 @@ test('colour mode defaults to light and only accepts known values', () => {
   assert.equal(site.normalizeConfig({ colorMode: 'dark' }).colorMode, 'dark')
   assert.equal(site.normalizeConfig({ colorMode: 'auto' }).colorMode, 'auto')
   assert.equal(site.normalizeConfig({ colorMode: 'sepia' }).colorMode, 'light')
+})
+
+test('custom domain is stored as a bare host name', () => {
+  assert.equal(site.normalizeConfig({ customDomain: 'https://Home.Example.com/gallery' }).customDomain, 'home.example.com')
+  assert.equal(site.normalizeConfig({ customDomain: 'example.com' }).customDomain, 'example.com')
+  for (const bad of ['localhost', 'a b.com', '"><script>.com', 'example', 'user@example.com', 123])
+    assert.equal(site.normalizeConfig({ customDomain: bad }).customDomain, '', String(bad))
+})
+
+test('on a custom domain the own homepage is at the root, others go to the app', async () => {
+  const d = { username: 'jay', host: 'misskey.io', app: 'https://i.chigoa.me' }
+  const s = await load('site.ts', { safeHttpUrl: url.safeHttpUrl, normalizeHost: misskey.normalizeHost, normalizeDomain: domain.normalizeDomain, domainSite: () => d })
+  assert.equal(s.sitePath('jay', 'misskey.io'), '/')
+  assert.equal(s.sitePath('Jay', 'misskey.io', 'gallery'), '/gallery')
+  assert.equal(s.sitePath('friend', 'misskey.io', 'about'), 'https://i.chigoa.me/@friend@misskey.io/about')
+  assert.equal(s.appHome(), 'https://i.chigoa.me')
+})
+
+test('pin bar accepts links on the registered custom domain', () => {
+  const app = 'https://i.chigoa.me/'
+  assert.deepEqual({ ...site.parseSiteLink('https://home.example.com/gallery/9abc', 'jay', 'misskey.io', app, 'home.example.com') }, { path: 'gallery/9abc' })
+  assert.deepEqual({ ...site.parseSiteLink('https://home.example.com/pages/소개', 'jay', 'misskey.io', app, 'home.example.com') }, { path: `pages/${encodeURIComponent('소개')}` })
+  assert.ok('error' in site.parseSiteLink('https://home.example.com/admin', 'jay', 'misskey.io', app, 'home.example.com'))
+  assert.ok('error' in site.parseSiteLink('https://other.example.com/gallery', 'jay', 'misskey.io', app, 'home.example.com'))
+})
+
+test('worker script names the homepage and the app', () => {
+  const w = domain.workerScript('jay', 'misskey.io', 'https://i.chigoa.me/')
+  assert.match(w, /const SITE = '@jay@misskey\.io'/)
+  assert.match(w, /const APP = 'https:\/\/i\.chigoa\.me'\n/)
+  assert.match(w, /HTMLRewriter/)
 })

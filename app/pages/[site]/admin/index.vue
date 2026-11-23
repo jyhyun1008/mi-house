@@ -5,7 +5,7 @@ import type { MenuItem, MenuType, SiteConfig } from '~/utils/site'
 const { site, isOwner, ownerApi, saveConfig, path } = useSite()
 const toast = useToast()
 
-const tab = ref<'basic' | 'look' | 'menu' | 'banner' | 'guestbook'>('basic')
+const tab = ref<'basic' | 'look' | 'menu' | 'banner' | 'guestbook' | 'domain'>('basic')
 const draft = ref<SiteConfig>(JSON.parse(JSON.stringify(site.value!.config)))
 const saving = ref(false)
 const dirty = computed(() => JSON.stringify(draft.value) !== JSON.stringify(site.value!.config))
@@ -54,7 +54,7 @@ function moveMenu(i: number, d: number) {
 // --- pin bar links ---
 const pinUrl = ref('')
 function addPin() {
-  const res = parseSiteLink(pinUrl.value, site.value!.username, site.value!.host, appUrl('/'))
+  const res = parseSiteLink(pinUrl.value, site.value!.username, site.value!.host, appUrl('/'), site.value!.config.customDomain)
   if ('error' in res) return toast.error(res.error)
   if (draft.value.pinBar.some(l => l.path === res.path)) return toast.error('이미 들어 있는 링크예요.')
   draft.value.pinBar.push({ path: res.path, label: '' })
@@ -97,6 +97,22 @@ function useExisting() {
   draft.value.guestbookNoteId = id
 }
 
+// --- custom domain ---
+/** the app's own address, which the Worker fetches the app from */
+const appAddress = domainSite()?.app ?? appUrl('/').replace(/\/$/, '')
+const worker = computed(() => workerScript(site.value!.username, site.value!.host, appAddress))
+const domainTyped = computed(() => normalizeDomain(draft.value.customDomain))
+const onThisDomain = computed(() => !!domainSite() && site.value!.config.customDomain === location.hostname.toLowerCase())
+async function copyText(text: string) {
+  try {
+    await navigator.clipboard.writeText(text)
+    toast.info('복사했어요.')
+  }
+  catch {
+    toast.error('복사하지 못했어요. 직접 선택해 주세요.')
+  }
+}
+
 onBeforeRouteLeave(() => (dirty.value ? confirm('저장하지 않은 설정이 있어요. 나갈까요?') : true))
 </script>
 
@@ -116,6 +132,7 @@ onBeforeRouteLeave(() => (dirty.value ? confirm('저장하지 않은 설정이 �
       <button :class="{ on: tab === 'menu' }" @click="tab = 'menu'">메뉴</button>
       <button :class="{ on: tab === 'banner' }" @click="tab = 'banner'">배너</button>
       <button :class="{ on: tab === 'guestbook' }" @click="tab = 'guestbook'">방명록·박수</button>
+      <button :class="{ on: tab === 'domain' }" @click="tab = 'domain'">도메인</button>
     </div>
 
     <section v-show="tab === 'basic'" class="mh-box">
@@ -318,6 +335,73 @@ onBeforeRouteLeave(() => (dirty.value ? confirm('저장하지 않은 설정이 �
       </template>
     </section>
 
+    <section v-show="tab === 'domain'" class="mh-box domain">
+      <p>
+        내 도메인(<code>home.example.com</code> 같은)으로 이 홈페이지를 열 수 있어요.
+        주소창에는 <code>https://내도메인/gallery</code>처럼 내 도메인만 보여요.
+        도메인이 <b>Cloudflare</b>에 연결되어 있어야 하고, 무료 요금제로 충분해요.
+      </p>
+      <p v-if="onThisDomain" class="mh-muted">✓ 지금 {{ site!.config.customDomain }}에서 보고 있어요. 연결이 끝났어요.</p>
+
+      <h3>1. 도메인을 Cloudflare에 연결</h3>
+      <p>
+        <a href="https://dash.cloudflare.com/" target="_blank" rel="noopener noreferrer">Cloudflare 대시보드 ↗</a>에서
+        <b>도메인 추가</b>(Add a domain)로 도메인을 넣고, 도메인을 산 곳(가비아, 후이즈, Namecheap 등)에서
+        네임서버를 Cloudflare가 알려 주는 두 개로 바꿔요. 반영까지 몇 분~하루쯤 걸려요.
+        이미 Cloudflare에 있는 도메인이면 넘어가요.
+      </p>
+
+      <h3>2. Worker 만들기</h3>
+      <ol>
+        <li><b>Workers &amp; Pages</b> → <b>Create</b> → <b>Worker</b>에서 "Hello World"로 시작해요. 이름은 아무거나(예: <code>my-house</code>), <b>Deploy</b>.</li>
+        <li><b>Edit code</b>를 누르고, 원래 있던 코드를 지운 뒤 아래 코드를 그대로 붙여 넣고 <b>Deploy</b>.</li>
+      </ol>
+      <div class="mh-field">
+        <span class="mh-row">이 홈페이지용 Worker 코드 <span class="mh-spacer" /><button class="mh-btn small" @click="copyText(worker)">복사</button></span>
+        <textarea class="mh-textarea code" readonly :value="worker" @focus="($event.target as HTMLTextAreaElement).select()" />
+        <small>이 코드는 이치고아메({{ appAddress }})의 파일을 내 도메인으로 보여 주기만 해요. 아무 정보도 저장하지 않아요.</small>
+      </div>
+
+      <h3>3. Worker에 도메인 붙이기</h3>
+      <p>
+        만든 Worker의 <b>Settings</b> → <b>Domains &amp; Routes</b> → <b>Add</b> → <b>Custom domain</b>에
+        쓰고 싶은 주소(예: <code>home.example.com</code> 또는 <code>example.com</code>)를 넣어요.
+        DNS 레코드와 HTTPS 인증서는 Cloudflare가 알아서 만들어요. 같은 이름의 DNS 레코드가 이미 있으면 먼저 지워 주세요.
+      </p>
+
+      <h3>4. 여기에 도메인 등록</h3>
+      <label class="mh-field">
+        <span>커스텀 도메인</span>
+        <input v-model.trim="draft.customDomain" class="mh-input" placeholder="home.example.com" autocapitalize="off" autocorrect="off" spellcheck="false">
+        <small v-if="draft.customDomain && !domainTyped" class="warn">도메인 이름만 넣어 주세요 (예: home.example.com). 이대로 저장하면 비워져요.</small>
+        <small v-else>위 3번에 넣은 주소와 똑같이 적고 <b>저장</b>해요. 등록한 도메인에서만 이 홈페이지가 열려요. 배너의 Link 주소도 이 도메인으로 바뀌어요.</small>
+      </label>
+      <p v-if="site!.config.customDomain">
+        <a class="mh-btn" :href="`https://${site!.config.customDomain}/`" target="_blank" rel="noopener noreferrer">{{ site!.config.customDomain }} 열어 보기 ↗</a>
+      </p>
+
+      <hr>
+      <h3>알아 두기</h3>
+      <ul>
+        <li>로그인은 주소마다 따로예요. 내 도메인에서 관리하려면 거기서 한 번 더 로그인해요. 방문자도 마찬가지예요.</li>
+        <li>원래 주소(<code>{{ appAddress }}/@{{ site!.username }}@{{ site!.host }}</code>)도 계속 열려요.</li>
+        <li>Cloudflare 무료 요금제의 Worker는 하루 10만 번까지 불려요. 개인 홈페이지에는 넉넉해요.</li>
+        <li>
+          주소창이 바뀌어도 괜찮다면 Worker 없이 <b>Rules → Redirect Rules</b>로 내 도메인을 원래 주소로 넘겨줄 수도 있어요.
+          이때는 여기 등록하지 않아도 돼요.
+          <details>
+            <summary>넘겨주기 설정 방법</summary>
+            <p>
+              DNS에 내 도메인 A 레코드를 <code>192.0.2.1</code>, 프록시 켬(주황 구름)으로 만들고,
+              Redirect Rule을 "Custom filter expression"으로 <code>(http.host eq "home.example.com")</code>,
+              URL redirect는 <b>Dynamic</b> · 301로 아래처럼 넣어요.
+            </p>
+            <code class="expr">concat("{{ appAddress }}/@{{ site!.username }}@{{ site!.host }}", http.request.uri.path)</code>
+          </details>
+        </li>
+      </ul>
+    </section>
+
     <section class="mh-box">
       <h2 class="mh-box-title">콘텐츠</h2>
       <div class="mh-row">
@@ -405,6 +489,32 @@ onBeforeRouteLeave(() => (dirty.value ? confirm('저장하지 않은 설정이 �
   width: auto;
   flex: 1;
   min-width: 0;
+}
+.domain h3 {
+  margin: 18px 0 6px;
+  font-size: 1em;
+}
+.domain p,
+.domain ol,
+.domain ul {
+  margin: 0 0 8px;
+  line-height: 1.7;
+}
+.domain ol,
+.domain ul {
+  padding-left: 1.4em;
+}
+.domain .code {
+  min-height: 260px;
+  font-size: 11px;
+  white-space: pre;
+}
+.expr {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.warn {
+  color: #c33;
 }
 .pinlist {
   margin: 0 0 6px;

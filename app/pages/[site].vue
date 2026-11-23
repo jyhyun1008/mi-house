@@ -5,7 +5,9 @@ const route = useRoute()
 const { site, skin, current, isOwner, path } = useSite()
 const { accounts } = useAccounts()
 
-const parsed = computed(() => parseSiteParam(String(route.params.site ?? '')))
+// on a custom domain the domain says whose homepage this is (see utils/domain.ts)
+const domain = domainSite()
+const parsed = computed(() => domain ?? parseSiteParam(String(route.params.site ?? '')))
 const error = ref('')
 const loading = ref(false)
 
@@ -23,7 +25,13 @@ async function load() {
   try {
     // Signed in on that server → fetch as that account (sees likes, own secret posts)
     const token = accounts.value.find(a => a.host === p.host && a.key === current.value?.key)?.token
-    site.value = await loadSite(p.username, p.host, token)
+    const loaded = await loadSite(p.username, p.host, token)
+    // a domain only shows a homepage whose owner registered it in Admin
+    if (domain && loaded.config.customDomain !== location.hostname.toLowerCase()) {
+      error.value = `${location.hostname}는 @${p.username}@${p.host} 홈페이지에 등록된 도메인이 아니에요. 주인이 관리 → 도메인에 이 도메인을 넣고 저장하면 열려요.`
+      return
+    }
+    site.value = loaded
   }
   catch (e) {
     error.value = e instanceof MisskeyApiError && e.code === 'NO_SUCH_USER'
@@ -127,7 +135,7 @@ function isActive(m: MenuItem) {
 const usesDandi = computed(() => !!config.value && [config.value.bodyFont, config.value.titleFont].some(f => f !== 'mona12'))
 
 // --- 갠홈 layout: Top is the widget board, every other section opens in a window ---
-const isTop = computed(() => site.value && decodeURI(route.path).replace(/\/$/, '') === path())
+const isTop = computed(() => site.value && decodeURI(route.path).replace(/\/$/, '') === path().replace(/\/$/, ''))
 const activeLabel = computed(() => {
   if (route.path.startsWith(path('admin'))) return 'Admin'
   return config.value?.menu.find(m => m.type !== 'home' && isActive(m))?.label ?? ''
@@ -136,7 +144,7 @@ const activeLabel = computed(() => {
 
 <template>
   <div v-if="error" class="mh-site mh-gaen theme-glass">
-    <div class="gh-stage"><div class="gh-state glass"><p>{{ error }}</p><NuxtLink class="mh-btn" to="/">이치고아메 처음으로</NuxtLink></div></div>
+    <div class="gh-stage"><div class="gh-state glass"><p>{{ error }}</p><NuxtLink class="mh-btn" :to="appHome()">이치고아메 처음으로</NuxtLink></div></div>
   </div>
   <div v-else-if="loading || !site || !config" class="mh-site mh-gaen theme-glass">
     <div class="gh-stage"><p class="gh-loading">Now Loading…</p></div>
@@ -186,7 +194,7 @@ const activeLabel = computed(() => {
       </div>
       <footer class="gh-foot">
         <MfmText v-if="config.footer" :text="config.footer" />
-        <span><template v-if="config.since">since {{ config.since }} · </template><NuxtLink to="/">이치고아메</NuxtLink></span>
+        <span><template v-if="config.since">since {{ config.since }} · </template><NuxtLink :to="appHome()">이치고아메</NuxtLink></span>
         <span v-if="usesDandi" title="공공누리 제1유형">font: 부산단디 ⓒ부산광역시</span>
       </footer>
     </template>

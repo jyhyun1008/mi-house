@@ -140,6 +140,8 @@ export interface SiteConfig {
   counter: { mode: CounterMode, imageUrl: string }
   footer: string
   customCss: string
+  /** own domain (`home.example.com`) set up with the Cloudflare Worker; '' = none */
+  customDomain: string
 }
 
 export function defaultConfig(title = ''): SiteConfig {
@@ -178,6 +180,7 @@ export function defaultConfig(title = ''): SiteConfig {
     counter: { mode: 'off', imageUrl: '' },
     footer: '',
     customCss: '',
+    customDomain: '',
   }
 }
 
@@ -257,6 +260,7 @@ export function normalizeConfig(raw: unknown, title = ''): SiteConfig {
     },
     footer: str(r.footer, 1000),
     customCss: str(r.customCss, 20000),
+    customDomain: normalizeDomain(r.customDomain),
   }
 }
 
@@ -305,8 +309,21 @@ export function parseSiteParam(param: string): { username: string, host: string 
   }
 }
 
+/**
+ * Where a homepage (or a screen in it) is. On a custom domain the domain's own homepage
+ * sits at the root, and every other homepage is a full URL on the app's own address.
+ */
 export function sitePath(username: string, host: string, sub = '') {
-  return `/@${username}@${host}${sub ? `/${sub}` : ''}`
+  const own = `/@${username}@${host}${sub ? `/${sub}` : ''}`
+  const d = domainSite()
+  if (!d) return own
+  if (d.username.toLowerCase() === username.toLowerCase() && d.host === host.toLowerCase()) return `/${sub}`
+  return `${d.app}${own}`
+}
+
+/** The app's landing page: `/`, or the app's own address when on a custom domain. */
+export function appHome(): string {
+  return domainSite()?.app ?? '/'
 }
 
 /** Counter key for a site: stable, URL-safe, short enough for counter services. */
@@ -320,7 +337,7 @@ export function counterKey(username: string, host: string): string {
  * (`https://host/@user/pages/name`), or a mi-house link into this site (`<app>/@user@host/…`).
  * `app` is this mi-house's own address (origin + base path).
  */
-export function parseSiteLink(raw: string, username: string, host: string, app: string): { path: string } | { error: string } {
+export function parseSiteLink(raw: string, username: string, host: string, app: string, domain = ''): { path: string } | { error: string } {
   let url: URL
   try {
     url = new URL(raw.trim(), app)
@@ -344,6 +361,13 @@ export function parseSiteLink(raw: string, username: string, host: string, app: 
     if (!m) return { error: '미스키에서는 페이지 주소(/@아이디/pages/…)만 넣을 수 있어요.' }
     if (m[1]!.toLowerCase() !== lower) return { error: `@${username}의 페이지만 넣을 수 있어요.` }
     return { path: `pages/${encodeURIComponent(m[2]!)}` }
+  }
+
+  // link on the homepage's own domain: the path is already inside the site
+  if (domain && url.host.toLowerCase() === domain) {
+    const sub = pathname.replace(/^\/|\/$/g, '').split('/').map(seg => encodeURIComponent(seg)).join('/')
+    if (!PIN_PATH.test(sub)) return { error: '페이지·갤러리·게시판 같은 메뉴 안의 주소를 넣어 주세요.' }
+    return { path: sub }
   }
 
   // mi-house link into this site

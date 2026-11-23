@@ -4,7 +4,8 @@ const { site, isOwner, path } = useSite()
 const toast = useToast()
 const config = computed(() => site.value!.config)
 const open = ref(false)
-const siteUrl = computed(() => appUrl(path()))
+// the owner's own domain is the address to link to, when there is one
+const siteUrl = computed(() => (config.value.customDomain ? `https://${config.value.customDomain}/` : appUrl(path())))
 
 async function copy(text: string) {
   try {
