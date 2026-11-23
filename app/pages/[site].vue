@@ -59,6 +59,18 @@ function enter() {
   catch { /* ignore */ }
 }
 
+// colour mode: the owner's choice, or the visitor's device when set to auto
+const prefersDark = ref(false)
+let darkQuery: MediaQueryList | null = null
+const onSchemeChange = (e: MediaQueryListEvent) => (prefersDark.value = e.matches)
+onMounted(() => {
+  darkQuery = matchMedia('(prefers-color-scheme: dark)')
+  prefersDark.value = darkQuery.matches
+  darkQuery.addEventListener('change', onSchemeChange)
+})
+onBeforeUnmount(() => darkQuery?.removeEventListener('change', onSchemeChange))
+const isDark = computed(() => config.value?.colorMode === 'dark' || (config.value?.colorMode === 'auto' && prefersDark.value))
+
 const vars = computed(() => {
   const c = config.value
   if (!c) return {}
@@ -130,7 +142,7 @@ const activeLabel = computed(() => {
     <div class="gh-stage"><p class="gh-loading">Now Loading…</p></div>
   </div>
 
-  <div v-else class="mh-site mh-gaen" :class="`theme-${config.skin}`" :style="vars">
+  <div v-else class="mh-site mh-gaen" :class="[`theme-${config.skin}`, { 'mh-dark': isDark }]" :style="vars">
     <!-- frame theme: border around the whole screen -->
     <div class="gh-deco" aria-hidden="true"><i /><i /><i /><i /></div>
     <GaenBgEffect :effect="config.bgEffect" />

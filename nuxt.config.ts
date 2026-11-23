@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   ssr: false,
   devtools: { enabled: false },
   devServer: { port: 3224 },
-  css: ['~/assets/css/base.css', '~/assets/css/mfm.css', '~/assets/css/skins.css'],
+  css: ['~/assets/css/base.css', '~/assets/css/mfm.css', '~/assets/css/skins.css', '~/assets/css/dark.css'],
   app: {
     head: {
       title: '이치고아메',

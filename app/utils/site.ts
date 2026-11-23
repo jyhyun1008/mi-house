@@ -28,6 +28,15 @@ export const BG_EFFECTS: { id: BgEffect, label: string, desc: string }[] = [
   { id: 'bubbles', label: '비눗방울', desc: '동글동글 방울이 올라가요.' },
 ]
 
+/** light / dark, or follow the visitor's device setting */
+export type ColorMode = 'light' | 'dark' | 'auto'
+
+export const COLOR_MODES: { id: ColorMode, label: string }[] = [
+  { id: 'light', label: '라이트' },
+  { id: 'dark', label: '다크' },
+  { id: 'auto', label: '방문자 기기 설정 따라가기' },
+]
+
 /** Skins from earlier versions → the closest theme */
 const LEGACY_SKINS: Record<string, Skin> = { gaenhome: 'glass', avocado: 'glass', simple: 'paper', bitool: 'frame', doujin: 'retro' }
 
@@ -101,6 +110,7 @@ export interface SiteConfig {
   subtitle: string
   skin: Skin
   bgEffect: BgEffect
+  colorMode: ColorMode
   /** body text */
   bodyFont: FontId
   /** site title and headings */
@@ -139,6 +149,7 @@ export function defaultConfig(title = ''): SiteConfig {
     subtitle: 'welcome to my house',
     skin: 'glass',
     bgEffect: 'none',
+    colorMode: 'light',
     bodyFont: 'gothic',
     titleFont: 'myeongjo',
     accent: '#5b7fc0',
@@ -204,6 +215,7 @@ export function normalizeConfig(raw: unknown, title = ''): SiteConfig {
     subtitle: str(r.subtitle, 200),
     skin: SKIN_IDS.has(r.skin) ? r.skin : LEGACY_SKINS[r.skin] ?? d.skin,
     bgEffect: BG_EFFECT_IDS.has(r.bgEffect) ? r.bgEffect : d.bgEffect,
+    colorMode: r.colorMode === 'dark' || r.colorMode === 'auto' ? r.colorMode : d.colorMode,
     bodyFont: FONT_IDS.has(r.bodyFont) ? r.bodyFont : d.bodyFont,
     titleFont: FONT_IDS.has(r.titleFont) ? r.titleFont : d.titleFont,
     accent: HEX.test(r.accent) ? r.accent : d.accent,

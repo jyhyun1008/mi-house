@@ -1,0 +1,223 @@
+/*
+ * Dark mode. `.mh-dark` goes on .mh-site when the owner picks dark (or "auto" and the visitor's
+ * device prefers dark). Every rule here is scoped under it, so light mode is untouched.
+ * Loaded after skins.css: rules here win ties with the skin rules they override.
+ */
+
+.mh-site.mh-dark {
+  color-scheme: dark;
+  --accent-soft: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* ============================== skin tokens ============================== */
+
+.mh-dark.theme-glass {
+  --bg: color-mix(in srgb, var(--accent) 14%, #12151d);
+  --bg-box: color-mix(in srgb, var(--accent) 10%, rgb(30 34 46 / 0.6));
+  --bg-embed: color-mix(in srgb, var(--accent) 8%, rgb(255 255 255 / 0.04));
+  --bg-hover: color-mix(in srgb, var(--accent) 16%, rgb(255 255 255 / 0.04));
+  --bg-rail: color-mix(in srgb, var(--accent) 8%, rgb(30 34 46 / 0.55));
+  --bg-active: color-mix(in srgb, var(--accent) 32%, transparent);
+  --border: color-mix(in srgb, var(--accent) 30%, rgb(255 255 255 / 0.1));
+  --fg: color-mix(in srgb, var(--accent) 14%, #d4d8e2);
+  --fg-strong: color-mix(in srgb, var(--accent) 22%, #f2f4f8);
+  --fg-muted: color-mix(in srgb, var(--accent) 25%, #8d93a3);
+  --fg-faint: color-mix(in srgb, var(--accent) 25%, #5a6070);
+  --fg-link: color-mix(in srgb, var(--accent) 70%, #fff);
+  --glass: color-mix(in srgb, var(--accent) 10%, rgb(28 32 44 / 0.55));
+  --glass-line: color-mix(in srgb, var(--accent) 25%, rgb(255 255 255 / 0.1));
+  --glass-shadow: 0 10px 34px rgb(0 0 0 / 0.35);
+  --dock-bg: color-mix(in srgb, var(--accent) 10%, rgb(28 32 44 / 0.8));
+  --window-bg: color-mix(in srgb, var(--accent) 8%, rgb(24 28 38 / 0.75));
+  --theme-bg:
+    radial-gradient(ellipse 60% 50% at 18% 22%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 60% at 85% 80%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
+    linear-gradient(160deg, color-mix(in srgb, var(--accent) 8%, #151924), color-mix(in srgb, var(--accent) 16%, #0c0f15));
+}
+.mh-dark.theme-glass .gh-logo {
+  color: color-mix(in srgb, var(--accent) 55%, #fff);
+}
+
+/* paper: kraft paper by lamplight */
+.mh-dark.theme-paper {
+  --bg: color-mix(in srgb, var(--accent) 8%, #1f1a16);
+  --bg-box: color-mix(in srgb, var(--accent) 4%, #2b2520);
+  --bg-embed: color-mix(in srgb, var(--accent) 6%, #332c26);
+  --bg-hover: color-mix(in srgb, var(--accent) 12%, transparent);
+  --bg-rail: color-mix(in srgb, var(--accent) 6%, #29231e);
+  --bg-active: color-mix(in srgb, var(--accent) 24%, transparent);
+  --border: color-mix(in srgb, var(--accent) 25%, rgb(230 200 160 / 0.14));
+  --fg: color-mix(in srgb, var(--accent) 10%, #ddd0c2);
+  --fg-strong: color-mix(in srgb, var(--accent) 18%, #f5ece0);
+  --fg-muted: color-mix(in srgb, var(--accent) 20%, #a39282);
+  --fg-faint: color-mix(in srgb, var(--accent) 20%, #6c5f53);
+  --fg-link: color-mix(in srgb, var(--accent) 70%, #f5ece0);
+  --glass: color-mix(in srgb, var(--accent) 4%, rgb(43 37 32 / 0.95));
+  --glass-line: color-mix(in srgb, var(--accent) 20%, rgb(230 200 160 / 0.12));
+  --glass-shadow: 0 2px 2px rgb(0 0 0 / 0.2), 0 8px 22px rgb(0 0 0 / 0.35);
+  --dock-bg: color-mix(in srgb, var(--accent) 4%, #2b2520);
+  --window-bg: color-mix(in srgb, var(--accent) 3%, rgb(40 34 29 / 0.97));
+  --tag-bg: color-mix(in srgb, var(--accent) 80%, #4a3a2e);
+  --tape: color-mix(in srgb, var(--accent) 50%, rgb(110 90 70 / 0.85));
+  --theme-bg:
+    radial-gradient(ellipse 40% 30% at 12% 8%, rgb(255 230 190 / 0.06), transparent 70%),
+    radial-gradient(ellipse 45% 45% at 90% 92%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 70%),
+    radial-gradient(ellipse 30% 30% at 30% 85%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%),
+    repeating-linear-gradient(90deg, rgb(255 240 220 / 0.015) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(0deg, rgb(255 240 220 / 0.018) 0 1px, transparent 1px 4px),
+    linear-gradient(color-mix(in srgb, var(--accent) 5%, #221d19), color-mix(in srgb, var(--accent) 9%, #181411));
+}
+.mh-dark.theme-paper .gh-logo {
+  color: color-mix(in srgb, var(--accent) 55%, #f5ece0);
+}
+.mh-dark.theme-paper .gh-h {
+  color: color-mix(in srgb, var(--accent) 65%, #f5ece0);
+  background: linear-gradient(transparent 60%, color-mix(in srgb, var(--accent) 30%, transparent) 60%);
+}
+/* the floating (.center) image has no card behind it */
+.mh-dark.theme-paper .gh-visual:not(.center) {
+  background: #2e2822;
+}
+
+/* frame: pale ink on a night-blue wall */
+.mh-dark.theme-frame {
+  --ink: color-mix(in srgb, var(--accent) 50%, #e8ecf4);
+  --bg: color-mix(in srgb, var(--accent) 10%, #12151c);
+  --bg-box: rgb(255 255 255 / 0.04);
+  --bg-embed: rgb(255 255 255 / 0.04);
+  --bg-hover: color-mix(in srgb, var(--ink) 8%, transparent);
+  --bg-rail: rgb(255 255 255 / 0.04);
+  --bg-active: color-mix(in srgb, var(--ink) 16%, transparent);
+  --border: color-mix(in srgb, var(--ink) 24%, transparent);
+  --fg: color-mix(in srgb, var(--ink) 70%, #9a9a9a);
+  --fg-strong: var(--ink);
+  --fg-muted: color-mix(in srgb, var(--ink) 50%, #6a6a6a);
+  --fg-faint: color-mix(in srgb, var(--ink) 30%, #444);
+  --fg-link: var(--ink);
+  --glass: color-mix(in srgb, var(--accent) 6%, rgb(20 24 32 / 0.4));
+  --glass-line: color-mix(in srgb, var(--ink) 22%, transparent);
+  --dock-bg: rgb(20 24 32 / 0.6);
+  --window-bg: color-mix(in srgb, var(--accent) 5%, rgb(18 21 28 / 0.9));
+  /* tags carry white text, so not the (pale) ink */
+  --tag-bg: color-mix(in srgb, var(--accent) 70%, #2a3040);
+  --theme-bg:
+    radial-gradient(ellipse 70% 60% at 50% 45%, rgb(255 255 255 / 0.04), transparent 75%),
+    radial-gradient(ellipse 55% 45% at 15% 90%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 70%),
+    radial-gradient(ellipse 45% 40% at 90% 10%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%),
+    linear-gradient(175deg, color-mix(in srgb, var(--accent) 6%, #161a22), color-mix(in srgb, var(--accent) 12%, #0d1016));
+}
+
+/* retro: windows on a dark dotted desktop */
+.mh-dark.theme-retro {
+  --bg: color-mix(in srgb, var(--accent) 10%, #1b1720);
+  --bg-box: color-mix(in srgb, var(--accent) 4%, #252029);
+  --bg-embed: color-mix(in srgb, var(--accent) 6%, #2b2530);
+  --bg-hover: color-mix(in srgb, var(--accent) 12%, transparent);
+  --bg-rail: color-mix(in srgb, var(--accent) 6%, #221d27);
+  --bg-active: color-mix(in srgb, var(--accent) 25%, #252029);
+  --border: color-mix(in srgb, var(--accent) 35%, #3a3440);
+  --fg: #d8d0dc;
+  --fg-strong: #f3eef5;
+  --fg-muted: #9a8f9c;
+  --fg-faint: #5d5463;
+  --fg-link: color-mix(in srgb, var(--accent) 70%, #fff);
+  --win-line: color-mix(in srgb, var(--accent) 55%, #888);
+  --glass: var(--bg-box);
+  --dock-bg: var(--bg-box);
+  --window-bg: var(--bg-box);
+  --glass-shadow: 3px 3px 0 color-mix(in srgb, var(--accent) 35%, transparent);
+  --theme-bg:
+    radial-gradient(circle, color-mix(in srgb, var(--accent) 30%, transparent) 1.2px, transparent 1.7px),
+    linear-gradient(var(--bg), var(--bg));
+}
+.mh-dark.theme-retro .gh-pinbar {
+  background: linear-gradient(var(--bg-box), color-mix(in srgb, var(--accent) 10%, var(--bg-box)));
+}
+.mh-dark.theme-retro .gh-h,
+.mh-dark.theme-retro .gh-window-bar,
+.mh-dark.theme-retro .gh-cate-slot .bt-cate-title {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 85%, #000), color-mix(in srgb, var(--accent) 40%, #2b2530));
+}
+.mh-dark.theme-retro .gh-close,
+.mh-dark.theme-retro .gh-visual:not(.center) {
+  background: var(--bg-box);
+}
+.mh-dark.theme-retro .gh-logo,
+.mh-dark.theme-retro .gh-clock .hm {
+  text-shadow: 3px 3px 0 var(--bg), 4px 4px 0 color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+/* ============================== shared parts ============================== */
+
+.mh-site.mh-dark .mh-input,
+.mh-site.mh-dark .mh-textarea,
+.mh-site.mh-dark .mh-select {
+  background: rgb(0 0 0 / 0.25);
+  color: var(--fg-strong);
+}
+
+/* 비툴 board kit */
+.mh-site.mh-dark .bt,
+.mh-site.mh-dark .gh-cate-slot .bt-cate {
+  --bt-line: color-mix(in srgb, var(--accent) 22%, #3c3c46);
+  --bt-head: color-mix(in srgb, var(--accent) 65%, #e6e6ee);
+  --bt-bar: linear-gradient(color-mix(in srgb, var(--accent) 8%, #2c2c35), color-mix(in srgb, var(--accent) 14%, #222229));
+}
+.mh-site.mh-dark .bt-btn {
+  border-color: color-mix(in srgb, var(--accent) 30%, #55555f);
+  background: linear-gradient(color-mix(in srgb, var(--accent) 6%, #36363f), color-mix(in srgb, var(--accent) 10%, #2a2a32));
+}
+.mh-site.mh-dark .bt-btn.strong {
+  border-color: var(--accent);
+  background: linear-gradient(var(--accent), color-mix(in srgb, var(--accent) 80%, #000));
+}
+.mh-site.mh-dark .bt-thumb {
+  background: var(--bg-box);
+}
+.mh-site.mh-dark .bt-noimg {
+  background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--accent) 10%, transparent) 0 6px, transparent 6px 12px);
+}
+.mh-site.mh-dark .bt-search select,
+.mh-site.mh-dark .bt-search input {
+  background: rgb(0 0 0 / 0.25);
+  color: var(--fg-strong);
+}
+
+/* gallery post card (GalleryCard.vue) */
+.mh-site.mh-dark .gv {
+  background: color-mix(in srgb, var(--accent) 5%, #1f1f26);
+  box-shadow: 5px 5px 0 color-mix(in srgb, var(--accent) 25%, rgb(0 0 0 / 0.3));
+}
+.mh-site.mh-dark .gv-no {
+  border-color: #1f1f26;
+}
+.mh-site.mh-dark .gv-no,
+.mh-site.mh-dark .gv-cat {
+  background: color-mix(in srgb, var(--accent) 80%, #000);
+}
+.mh-site.mh-dark .gv-stage,
+.mh-site.mh-dark .gv-thumbs button {
+  background: #16161b;
+}
+.mh-site.mh-dark .gv-close {
+  background: color-mix(in srgb, var(--accent) 6%, #26262e);
+}
+.mh-site.mh-dark .gv-name,
+.mh-site.mh-dark .gv-tag {
+  background: color-mix(in srgb, var(--accent) 25%, #26262e);
+}
+.mh-site.mh-dark .gv-btn {
+  border-color: color-mix(in srgb, var(--accent) 35%, #55555f);
+  background: #26262e;
+  color: color-mix(in srgb, var(--accent) 60%, #ddd);
+}
+.mh-site.mh-dark .gv-btn:hover,
+.mh-site.mh-dark .gv-tag:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* background effect: drop the white halo, which glares on a dark page */
+.mh-site.mh-dark .fx-sparkle i {
+  text-shadow: 0 0 8px color-mix(in srgb, var(--accent) 70%, transparent);
+}

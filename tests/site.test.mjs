@@ -116,3 +116,10 @@ test('background effect is kept when valid and reset otherwise', () => {
   c.bgEffect = 'notes'
   assert.equal(site.configFromBlocks(site.configToBlocks(c), 'Jay').bgEffect, 'notes')
 })
+
+test('colour mode defaults to light and only accepts known values', () => {
+  assert.equal(site.defaultConfig().colorMode, 'light')
+  assert.equal(site.normalizeConfig({ colorMode: 'dark' }).colorMode, 'dark')
+  assert.equal(site.normalizeConfig({ colorMode: 'auto' }).colorMode, 'auto')
+  assert.equal(site.normalizeConfig({ colorMode: 'sepia' }).colorMode, 'light')
+})

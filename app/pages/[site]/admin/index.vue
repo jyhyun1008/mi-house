@@ -185,6 +185,15 @@ onBeforeRouteLeave(() => (dirty.value ? confirm('저장하지 않은 설정이 �
         </div>
       </div>
       <div class="mh-field">
+        <span>화면 모드</span>
+        <div class="fx-pick">
+          <label v-for="m in COLOR_MODES" :key="m.id" class="mh-check">
+            <input v-model="draft.colorMode" type="radio" :value="m.id"> {{ m.label }}
+          </label>
+        </div>
+        <small>어느 스킨에서나 쓸 수 있어요. "방문자 기기 설정 따라가기"는 보는 사람의 기기가 다크 모드면 다크로 보여요.</small>
+      </div>
+      <div class="mh-field">
         <span>배경 효과</span>
         <div class="fx-pick">
           <label v-for="e in BG_EFFECTS" :key="e.id" class="mh-check" :title="e.desc">
