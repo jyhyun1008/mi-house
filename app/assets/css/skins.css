@@ -1153,7 +1153,13 @@
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: none;
   }
-  .mh-gaen .gh-shell > * {
+  /* name each child: the desktop placements above are more specific than `> *` */
+  .mh-gaen .gh-shell > *,
+  .mh-gaen .gh-shell > .gh-left,
+  .mh-gaen .gh-shell > .gh-pinbar,
+  .mh-gaen .gh-shell > .gh-board,
+  .mh-gaen .gh-shell > .gh-window,
+  .mh-gaen .gh-shell > .gh-cate-slot {
     grid-column: auto;
     grid-row: auto;
   }

@@ -97,6 +97,8 @@ function login() {
 }
 .frame {
   width: min(620px, 100%);
+  min-width: 0;
+  overflow-wrap: anywhere;
   /* auto on all sides centres vertically, but stays top-aligned when taller than the screen */
   margin: auto;
   padding: 18px 22px;
