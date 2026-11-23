@@ -1145,6 +1145,177 @@
   border-style: dotted;
 }
 
+/* ============================== gallery feed card (GalleryCard.vue), per theme ============================== */
+/* `.mh-site.theme-x` outranks the component's scoped rules; colours come from the theme tokens so dark mode follows. */
+
+/* glass: a frosted pane with a soft glow */
+.mh-site.theme-glass .gv {
+  border: 1px solid var(--glass-line);
+  border-radius: 20px;
+  background: var(--glass);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+.mh-site.theme-glass .gv-no {
+  border: 0;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+.mh-site.theme-glass .gv-stage {
+  border-radius: 14px;
+  background: var(--bg-embed);
+}
+
+/* paper: a scrapbook page — taped down, polaroid-framed picture, stamp number */
+.mh-site.theme-paper .gv {
+  border: 1px solid var(--glass-line);
+  border-radius: 3px;
+  background: var(--bg-box);
+  box-shadow: var(--glass-shadow);
+}
+.mh-site.theme-paper .gv::before {
+  content: '';
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  width: 96px;
+  height: 22px;
+  transform: translateX(-50%) rotate(-2deg);
+  background:
+    repeating-linear-gradient(45deg, rgb(255 255 255 / 0.35) 0 6px, transparent 6px 12px),
+    var(--tape);
+  opacity: 0.88;
+  box-shadow: 0 1px 2px rgb(90 70 40 / 0.1);
+}
+.mh-site.theme-paper .gv-no {
+  border: 2px solid var(--bg-box);
+  border-radius: 2px;
+  background: var(--tag-bg);
+  transform: rotate(-6deg);
+}
+.mh-site.theme-paper .gv-stage {
+  padding: 8px 8px 22px;
+  border-radius: 0;
+  background: #fffdf8;
+  box-shadow: 0 1px 4px rgb(90 70 40 / 0.15);
+  transform: rotate(-0.4deg);
+}
+.mh-site.theme-paper .gv-name {
+  background: linear-gradient(transparent 55%, color-mix(in srgb, var(--accent) 30%, transparent) 55%);
+}
+.mh-site.theme-paper .gv-close {
+  border-style: dashed;
+}
+
+/* frame: thin ink lines, a second outline, square corners, spaced-out caps */
+.mh-site.theme-frame .gv {
+  margin: 16px 10px 10px 16px;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  background: var(--window-bg);
+  box-shadow: none;
+  outline: 1px solid var(--border);
+  outline-offset: 5px;
+}
+.mh-site.theme-frame .gv-no {
+  border: 0;
+  border-radius: 0;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: var(--title-font);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+}
+.mh-site.theme-frame .gv-stage {
+  border-radius: 0;
+  outline: 1px solid var(--border);
+  outline-offset: 3px;
+}
+.mh-site.theme-frame .gv-title {
+  font-family: var(--title-font);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.mh-site.theme-frame .gv-close {
+  border-radius: 0;
+  letter-spacing: 0.35em;
+}
+.mh-site.theme-frame .gv-thumbs button,
+.mh-site.theme-frame .gv-thumbs img,
+.mh-site.theme-frame .gv-cat,
+.mh-site.theme-frame .gv-tag,
+.mh-site.theme-frame .gv-btn {
+  border-radius: 0;
+}
+.mh-site.theme-frame .gv-cat {
+  background: var(--tag-bg);
+}
+
+/* retro: a little window with a gradient title bar and a hard drop shadow */
+.mh-site.theme-retro .gv {
+  padding-top: 38px;
+  border: 1px solid var(--win-line);
+  border-radius: 0;
+  background: var(--window-bg);
+  box-shadow: var(--glass-shadow);
+}
+.mh-site.theme-retro .gv::before {
+  content: '◆\FE0E  gallery';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  padding: 0 8px 0 24px;
+  border-bottom: 1px solid var(--win-line);
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 45%, #fff));
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 0.08em;
+}
+.mh-site.theme-retro .gv::after {
+  content: '_ □ ×';
+  position: absolute;
+  top: 0;
+  right: 8px;
+  color: #fff;
+  font-size: 10px;
+  line-height: 20px;
+  letter-spacing: 0.3em;
+  opacity: 0.85;
+}
+.mh-site.theme-retro .gv-no {
+  border: 1px solid var(--win-line);
+  border-radius: 0;
+  background: var(--window-bg);
+  color: var(--win-line);
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.mh-site.theme-retro .gv-stage {
+  border: 1px solid var(--win-line);
+  border-radius: 0;
+}
+.mh-site.theme-retro .gv-thumbs button,
+.mh-site.theme-retro .gv-thumbs img,
+.mh-site.theme-retro .gv-close,
+.mh-site.theme-retro .gv-cat,
+.mh-site.theme-retro .gv-tag,
+.mh-site.theme-retro .gv-btn {
+  border-radius: 0;
+}
+.mh-site.theme-retro .gv-close {
+  border-color: var(--win-line);
+}
+.mh-site.theme-retro .gv-tag::before {
+  content: '[';
+}
+.mh-site.theme-retro .gv-tag::after {
+  content: ']';
+}
+
 /* ============================== small screens ============================== */
 
 @media (max-width: 1000px), (max-height: 620px) {

@@ -183,21 +183,16 @@
   color: var(--fg-strong);
 }
 
-/* gallery post card (GalleryCard.vue) */
-.mh-site.mh-dark .gv {
-  background: color-mix(in srgb, var(--accent) 5%, #1f1f26);
-  box-shadow: 5px 5px 0 color-mix(in srgb, var(--accent) 25%, rgb(0 0 0 / 0.3));
-}
-.mh-site.mh-dark .gv-no {
-  border-color: #1f1f26;
-}
-.mh-site.mh-dark .gv-no,
+/* gallery post card (GalleryCard.vue): the card itself and its number take theme tokens (skins.css) */
 .mh-site.mh-dark .gv-cat {
   background: color-mix(in srgb, var(--accent) 80%, #000);
 }
 .mh-site.mh-dark .gv-stage,
 .mh-site.mh-dark .gv-thumbs button {
   background: #16161b;
+}
+.mh-site.mh-dark.theme-paper .gv-stage {
+  background: #2e2822;
 }
 .mh-site.mh-dark .gv-close {
   background: color-mix(in srgb, var(--accent) 6%, #26262e);
