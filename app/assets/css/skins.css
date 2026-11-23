@@ -1105,6 +1105,11 @@
 .theme-retro .gh-since {
   font-style: normal;
 }
+/* --fg-strong is a fixed near-black here, so tint the clock like the site title */
+.theme-retro .gh-clock .hm {
+  color: var(--accent);
+  text-shadow: 3px 3px 0 #fff, 4px 4px 0 color-mix(in srgb, var(--accent) 30%, transparent);
+}
 .theme-retro .gh-dock {
   border-radius: 0;
   border-color: var(--win-line);
