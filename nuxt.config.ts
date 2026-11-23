@@ -9,7 +9,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/base.css', '~/assets/css/mfm.css', '~/assets/css/skins.css'],
   app: {
     head: {
-      title: 'mi-house',
+      title: '이치고아메',
       htmlAttrs: { lang: 'ko' },
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' },

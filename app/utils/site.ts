@@ -253,7 +253,7 @@ export function configFromBlocks(blocks: PageBlock[], title = ''): SiteConfig {
 
 export function configToBlocks(config: SiteConfig): PageBlock[] {
   return [
-    { id: 'mihouse-about', type: 'text', text: '<small>이 페이지는 mi-house 홈페이지 설정을 담고 있어요. 지우면 홈페이지가 기본 설정으로 돌아갑니다.</small>' },
+    { id: 'mihouse-about', type: 'text', text: '<small>이 페이지는 이치고아메 홈페이지 설정을 담고 있어요. 지우면 홈페이지가 기본 설정으로 돌아갑니다.</small>' },
     { id: 'mihouse-config', type: 'text', text: `\`\`\`json\n${JSON.stringify(config, null, 2)}\n\`\`\`` },
   ]
 }

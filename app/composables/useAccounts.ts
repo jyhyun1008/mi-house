@@ -70,7 +70,7 @@ export function startMiAuth(rawHost: string, returnTo = '/') {
   const session = crypto.randomUUID()
   saveJson(PENDING_KEY, { host, session, returnTo: returnTo.startsWith('/') && !returnTo.startsWith('//') ? returnTo : '/' })
   const q = new URLSearchParams({
-    name: 'mi-house',
+    name: '이치고아메',
     callback: appUrl('/callback'),
     permission: MIAUTH_PERMISSIONS.join(','),
   })

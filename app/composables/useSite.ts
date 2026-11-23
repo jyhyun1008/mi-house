@@ -68,9 +68,9 @@ export function useSite() {
   async function saveConfig(config: SiteConfig) {
     const st = s()
     const params = {
-      title: `${config.title} — mi-house 설정`,
+      title: `${config.title} — 이치고아메 설정`,
       name: CONFIG_PAGE_NAME,
-      summary: 'mi-house 홈페이지 설정',
+      summary: '이치고아메 홈페이지 설정',
       content: configToBlocks(config),
       variables: [],
       script: '',
