@@ -25,6 +25,22 @@ export function useSite() {
   const local = computed<Account | null>(() => (current.value && site.value && current.value.host === site.value.host ? current.value : null))
   const isOwner = computed(() => !!local.value && local.value.user.id === site.value?.owner.id)
 
+  /**
+   * The server hides notes from visitors who aren't signed in there (Misskey's "content for
+   * visitors" setting): note lists come back empty and notes/show fails, but the profile still
+   * has the note count, and pinned notes arrive with `isHidden` and no text.
+   */
+  const notesHiddenFor = useState<string | null>('notesHiddenFor', () => null)
+  const notesLocked = computed(() => {
+    const st = site.value
+    if (!st || local.value || !st.owner.notesCount) return false
+    return notesHiddenFor.value === st.key || !!st.owner.pinnedNotes?.some(n => n.isHidden)
+  })
+  /** Call when the owner's note list came back empty although they have notes. */
+  function markNotesHidden() {
+    if (site.value && !local.value && site.value.owner.notesCount > 0) notesHiddenFor.value = site.value.key
+  }
+
   function s() {
     if (!site.value) throw new Error('사이트를 불러오지 못했어요.')
     return site.value
@@ -89,7 +105,7 @@ export function useSite() {
     st.config = normalizeConfig(JSON.parse(JSON.stringify(config)), st.owner.name ?? st.username)
   }
 
-  return { site, skin, local, current, isOwner, api, ownerApi, path, resolveNote, ownerIdFor, saveConfig }
+  return { site, skin, local, current, isOwner, notesLocked, markNotesHidden, api, ownerApi, path, resolveNote, ownerIdFor, saveConfig }
 }
 
 /** Fetch owner + settings for `@username@host`. */

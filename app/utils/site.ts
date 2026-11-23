@@ -62,8 +62,8 @@ export const MENU_TYPES: { type: MenuType, label: string, desc: string }[] = [
   { type: 'home', label: 'Top', desc: '첫 화면' },
   { type: 'about', label: 'About', desc: '프로필 소개' },
   { type: 'gallery', label: 'Gallery', desc: '갤러리 게시물' },
-  { type: 'pages', label: 'Text', desc: '페이지 목록 (글·소설)' },
-  { type: 'clips', label: 'Board', desc: '공개 클립 목록' },
+  { type: 'pages', label: 'Board', desc: '페이지 목록 (글·소설)' },
+  { type: 'clips', label: 'Scrap', desc: '공개 클립 목록' },
   { type: 'clip', label: 'Clip', desc: '클립 하나를 게시판/스크랩북으로' },
   { type: 'page', label: 'Page', desc: '페이지 하나를 메뉴로' },
   { type: 'diary', label: 'Diary', desc: '노트를 일기장처럼' },
@@ -182,8 +182,8 @@ export function defaultConfig(title = ''): SiteConfig {
       { id: 'm-home', type: 'home', label: 'Top' },
       { id: 'm-about', type: 'about', label: 'About' },
       { id: 'm-gallery', type: 'gallery', label: 'Gallery' },
-      { id: 'm-pages', type: 'pages', label: 'Text' },
-      { id: 'm-clips', type: 'clips', label: 'Board' },
+      { id: 'm-pages', type: 'pages', label: 'Board' },
+      { id: 'm-clips', type: 'clips', label: 'Scrap' },
       { id: 'm-diary', type: 'diary', label: 'Diary' },
       { id: 'm-guest', type: 'guestbook', label: 'Guestbook' },
     ],
@@ -212,6 +212,13 @@ export function safeImageUrl(v: unknown): string {
   return typeof v === 'string' && /^https:\/\/[^\s"'()\\<>]+$/.test(v) ? v : ''
 }
 
+/** Old default menu names (pages were "Text", clips were "Board") → the current ones; custom names stay. */
+function renamedLabel(type: string, label: string) {
+  if (type === 'pages' && label === 'Text') return 'Board'
+  if (type === 'clips' && label === 'Board') return 'Scrap'
+  return label
+}
+
 /** Untrusted JSON (anyone can edit their own config page by hand) → a valid config. */
 export function normalizeConfig(raw: unknown, title = ''): SiteConfig {
   const d = defaultConfig(title)
@@ -221,7 +228,7 @@ export function normalizeConfig(raw: unknown, title = ''): SiteConfig {
     ? r.menu.filter((m: any) => m && MENU_IDS.has(m.type)).slice(0, 30).map((m: any, i: number) => ({
         id: str(m.id, 40) || `m-${i}`,
         type: m.type,
-        label: str(m.label, 40) || m.type,
+        label: renamedLabel(m.type, str(m.label, 40)) || m.type,
         ...(m.clipId ? { clipId: str(m.clipId, 64) } : {}),
         ...(m.view === 'scrap' || m.view === 'board' ? { view: m.view } : {}),
         ...(m.pageName ? { pageName: str(m.pageName, 256) } : {}),

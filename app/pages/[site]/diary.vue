@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import type { Note } from '~/types/misskey'
 
-const { site, api, ownerApi, isOwner } = useSite()
+const { site, api, ownerApi, isOwner, notesLocked, markNotesHidden } = useSite()
 const toast = useToast()
 const tag = computed(() => site.value!.config.diaryTag.toLowerCase())
 
 const { items, loading, done, error, more, reset } = usePaged<Note>(untilId =>
   api<Note[]>('users/notes', { userId: site.value!.owner.id, limit: 30, untilId, withReplies: false, withRenotes: false, withChannelNotes: false }), 30)
-onMounted(more)
+onMounted(async () => {
+  await more()
+  if (done.value && !items.value.length) markNotesHidden()
+})
 
 const entries = computed(() => items.value.filter(n => n.visibility !== 'specified' && (!tag.value || n.tags?.some(t => t.toLowerCase() === tag.value))))
 // hashtags as categories (the diary tag itself is every entry's, so it's left out)
@@ -63,7 +66,8 @@ async function post() {
             <NoteCard :note="n" hide-author reactable />
           </div>
         </div>
-        <p v-if="error" class="bt-empty">{{ error }}</p>
+        <LockedNotes v-if="notesLocked && !items.length" count />
+        <p v-else-if="error" class="bt-empty">{{ error }}</p>
         <p v-else-if="done && !filtered.length" class="bt-empty">{{ active ? `#${active} 일기가 없어요.` : '아직 일기가 없어요.' }}</p>
         <p v-else-if="loading && !filtered.length" class="bt-empty">Now Loading…</p>
         <div v-if="!done" class="mh-more"><button class="bt-btn" :disabled="loading" @click="more">{{ loading ? '…' : '지난 일기 더 보기' }}</button></div>

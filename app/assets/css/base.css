@@ -371,6 +371,30 @@ h4.mh-heading { font-size: 1em; }
   color: var(--fg-muted);
 }
 
+.mh-locked {
+  padding: 22px 12px;
+  text-align: center;
+  color: var(--fg-muted);
+  line-height: 1.7;
+}
+.mh-locked b {
+  color: var(--fg-strong);
+}
+.mh-locked .ic {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 22px;
+}
+.mh-locked.small {
+  padding: 6px 0;
+  font-size: 12px;
+}
+.mh-locked.small .ic {
+  display: inline;
+  margin: 0 4px 0 0;
+  font-size: inherit;
+}
+
 .mh-list {
   display: flex;
   flex-direction: column;

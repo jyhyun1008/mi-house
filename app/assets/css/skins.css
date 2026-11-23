@@ -307,7 +307,7 @@
   text-align: center;
 }
 .mh-gaen .gh-log .tag.k-gallery { background: color-mix(in srgb, var(--tag-bg) 60%, #c77); }
-.mh-gaen .gh-log .tag.k-board { background: color-mix(in srgb, var(--tag-bg) 60%, #7a7); }
+.mh-gaen .gh-log .tag.k-scrap { background: color-mix(in srgb, var(--tag-bg) 60%, #7a7); }
 .mh-gaen .gh-log .tag.k-memo { background: color-mix(in srgb, var(--tag-bg) 50%, #99a); }
 .mh-gaen .gh-log .tag.k-guest { background: color-mix(in srgb, var(--tag-bg) 55%, #b8a); }
 .mh-gaen .gh-log .lbl {

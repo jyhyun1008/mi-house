@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Note } from '~/types/misskey'
 
-const { site, api, current, isOwner, path, resolveNote, ownerIdFor } = useSite()
+const { site, api, current, isOwner, notesLocked, path, resolveNote, ownerIdFor } = useSite()
 const toast = useToast()
 const noteId = computed(() => site.value!.config.guestbookNoteId)
 const head = ref<Note | null>(null)
@@ -68,7 +68,8 @@ async function post() {
       <div class="mh-list">
         <div v-for="n in entries" :key="n.id"><NoteCard :note="n" /></div>
       </div>
-      <p v-if="error" class="mh-empty">{{ error }}</p>
+      <LockedNotes v-if="notesLocked && !entries.length" />
+      <p v-else-if="error" class="mh-empty">{{ error }}</p>
       <p v-else-if="done && !entries.length" class="mh-empty">첫 번째 방명록을 남겨 주세요!</p>
       <div v-if="!done" class="mh-more"><button class="mh-btn" :disabled="loading" @click="more">{{ loading ? '…' : 'more' }}</button></div>
     </template>

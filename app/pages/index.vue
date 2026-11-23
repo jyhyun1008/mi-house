@@ -71,9 +71,9 @@ function login() {
       <section class="box how">
         <h2>≫ HOW IT WORKS</h2>
         <dl>
-          <dt>Text</dt><dd>미스키 <b>페이지</b>가 글·소설·설정 문서가 돼요.</dd>
+          <dt>Board</dt><dd>미스키 <b>페이지</b>가 글·소설·설정 문서가 돼요.</dd>
           <dt>Gallery</dt><dd>미스키 <b>갤러리</b> 게시물이 그림 게시판이 돼요.</dd>
-          <dt>Board</dt><dd>공개 <b>클립</b>이 게시판·스크랩북이 돼요.</dd>
+          <dt>Scrap</dt><dd>공개 <b>클립</b>이 게시판·스크랩북이 돼요.</dd>
           <dt>Guestbook</dt><dd>노트 하나의 <b>답글</b>이 방명록, 리액션이 박수가 돼요. 비밀글은 "지정 공개"로.</dd>
           <dt>Setting</dt><dd>스킨·메뉴 같은 설정은 <code>mi-house</code>라는 공개 페이지에 저장돼요. 별도 서버가 없어요.</dd>
         </dl>

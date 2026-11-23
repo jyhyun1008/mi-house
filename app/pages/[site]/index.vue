@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Clip, GalleryPost, Note, Page } from '~/types/misskey'
 
-const { site, api, path, isOwner } = useSite()
+const { site, api, path, isOwner, notesLocked, markNotesHidden } = useSite()
 const config = computed(() => site.value!.config)
 const owner = computed(() => site.value!.owner)
 
@@ -23,7 +23,10 @@ onMounted(async () => {
   if (c.homePage) tasks.push(api<Page>('pages/show', { username: site.value!.username, name: c.homePage }).then(v => (home.value = v)).catch(() => {}))
   if (c.menu.some(m => m.type === 'diary')) {
     tasks.push(api<Note[]>('users/notes', { userId, limit: 20, withReplies: false, withRenotes: false, withChannelNotes: false })
-      .then(v => (memos.value = v.filter(n => n.visibility !== 'specified' && (!c.diaryTag || n.tags?.some(t => t.toLowerCase() === c.diaryTag.toLowerCase()))).slice(0, 5)))
+      .then((v) => {
+        if (!v.length) markNotesHidden()
+        memos.value = v.filter(n => n.visibility !== 'specified' && (!c.diaryTag || n.tags?.some(t => t.toLowerCase() === c.diaryTag.toLowerCase()))).slice(0, 5)
+      })
       .catch(() => {}))
   }
   if (c.guestbookNoteId) {
@@ -47,9 +50,9 @@ const excerpt = (n: Note) => (n.cw ?? n.text ?? '')
 /** "Update" / "Latest" log across every hidden feature */
 const updates = computed(() => {
   const list: { date: string, kind: string, label: string, to: string }[] = [
-    ...pages.value.map(p => ({ date: p.updatedAt, kind: Date.parse(p.updatedAt) - Date.parse(p.createdAt) > 86_400_000 ? 'Text 수정' : 'Text', label: p.title || p.name, to: path(`pages/${encodeURIComponent(p.name)}`) })),
+    ...pages.value.map(p => ({ date: p.updatedAt, kind: Date.parse(p.updatedAt) - Date.parse(p.createdAt) > 86_400_000 ? 'Board 수정' : 'Board', label: p.title || p.name, to: path(`pages/${encodeURIComponent(p.name)}`) })),
     ...posts.value.map(g => ({ date: g.createdAt, kind: 'Gallery', label: g.title, to: path(`gallery/${g.id}`) })),
-    ...clips.value.filter(c => c.lastClippedAt).map(c => ({ date: c.lastClippedAt!, kind: 'Board', label: c.name, to: path(`clips/${c.id}`) })),
+    ...clips.value.filter(c => c.lastClippedAt).map(c => ({ date: c.lastClippedAt!, kind: 'Scrap', label: c.name, to: path(`clips/${c.id}`) })),
     ...memos.value.map(n => ({ date: n.createdAt, kind: 'Memo', label: excerpt(n), to: path('diary') })),
     ...guests.value.map(n => ({ date: n.createdAt, kind: 'Guest Book', label: n.visibility === 'specified' ? '🔒 비밀글' : `${n.user.name ?? n.user.username}`, to: path('guestbook') })),
   ]
@@ -100,7 +103,8 @@ const kindClass = (k: string) => `k-${k.split(' ')[0]!.toLowerCase()}`
             <time>{{ short(u.date) }}</time>
           </li>
         </ul>
-        <p v-else class="mh-muted">아직 소식이 없어요.</p>
+        <p v-else-if="!notesLocked" class="mh-muted">아직 소식이 없어요.</p>
+        <LockedNotes v-if="notesLocked" small />
       </section>
 
       <GaenPinnedNotes />

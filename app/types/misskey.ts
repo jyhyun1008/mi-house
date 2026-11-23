@@ -64,6 +64,8 @@ export interface Note {
   renote?: Note | null
   uri?: string
   url?: string
+  /** set when the server withholds the note's content from this viewer */
+  isHidden?: boolean
 }
 
 export interface Clip {

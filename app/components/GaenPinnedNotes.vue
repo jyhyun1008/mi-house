@@ -7,7 +7,7 @@ const { site } = useSite()
 const notes = computed(() => (site.value!.owner.pinnedNotes ?? []).slice(0, 5))
 const opened = ref<Note | null>(null)
 
-const label = (n: Note) => (n.cw ?? n.text ?? '')
+const label = (n: Note) => n.isHidden ? `🔒 ${new Date(n.createdAt).toLocaleDateString('ko-KR')}의 노트` : (n.cw ?? n.text ?? '')
   .replace(/\$\[[\w.,=-]+\s?/g, '').replace(/\]/g, '').replace(/:[\w@.+-]+:/g, '').replace(/(\*\*|__|~~|`)/g, '').replace(/\s+/g, ' ').trim()
   || (n.files.length ? '(사진)' : '노트')
 </script>
@@ -24,7 +24,8 @@ const label = (n: Note) => (n.cw ?? n.text ?? '')
       </li>
     </ul>
     <Modal v-if="opened" title="고정한 노트" @close="opened = null">
-      <NoteCard :note="opened" reactable />
+      <LockedNotes v-if="opened.isHidden" />
+      <NoteCard v-else :note="opened" reactable />
     </Modal>
   </section>
 </template>
