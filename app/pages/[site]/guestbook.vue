@@ -46,6 +46,7 @@ async function post() {
     <h1 class="mh-page-title">Guestbook</h1>
     <div v-if="!noteId" class="mh-empty">
       방명록이 아직 없어요.
+      <p v-if="site!.config.waveboxUrl"><a class="mh-btn primary" :href="site!.config.waveboxUrl" target="_blank" rel="noopener noreferrer">💌 Wavebox로 보내기</a></p>
       <p v-if="isOwner"><NuxtLink class="mh-btn primary" :to="path('admin')">관리에서 방명록 만들기</NuxtLink></p>
     </div>
     <template v-else>
@@ -60,6 +61,13 @@ async function post() {
           <button class="mh-btn primary" :disabled="posting">남기기</button>
         </div>
       </form>
+      <div v-else-if="site!.config.waveboxUrl" class="mh-box login">
+        <p class="mh-muted">미스키 계정으로 로그인하면 방명록을 남길 수 있어요. 계정이 없거나 익명으로 보내고 싶으면 💌 Wavebox로 보내 주세요.</p>
+        <div class="mh-row">
+          <a class="mh-btn primary" :href="site!.config.waveboxUrl" target="_blank" rel="noopener noreferrer">💌 Wavebox로 보내기</a>
+        </div>
+        <SideVisitor bare />
+      </div>
       <div v-else class="mh-box login">
         <p class="mh-muted">방명록은 미스키 계정으로 남겨요. 어느 서버 계정이든 괜찮아요.</p>
         <SideVisitor bare />

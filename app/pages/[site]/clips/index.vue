@@ -34,11 +34,11 @@ const isNew = (c: Clip) => !!c.lastClippedAt && Date.now() - Date.parse(c.lastCl
 <template>
   <div class="bt">
     <div class="bt-head">
-      <h1 class="bt-title">Board<small v-if="active">#{{ active }}</small></h1>
+      <h1 class="bt-title">Scrap<small v-if="active">#{{ active }}</small></h1>
       <span class="bt-total">Total <b>{{ filtered.length }}</b></span>
     </div>
     <table v-if="filtered.length" class="bt-list">
-      <thead><tr><th>Board</th><th class="cnt">글</th><th class="date hide-sm">Last</th></tr></thead>
+      <thead><tr><th>Scrap</th><th class="cnt">글</th><th class="date hide-sm">Last</th></tr></thead>
       <tbody>
         <tr v-for="c in filtered" :key="c.id">
           <td class="subj">

@@ -22,7 +22,7 @@ const isNew = (p: Page) => Date.now() - Date.parse(p.createdAt) < 3 * 86_400_000
 <template>
   <div class="bt">
     <div class="bt-head">
-      <h1 class="bt-title">Text<small v-if="active">#{{ active }}</small></h1>
+      <h1 class="bt-title">Board<small v-if="active">#{{ active }}</small></h1>
       <span class="bt-total">Total <b>{{ filtered.length }}</b> · Page <b>{{ page }}</b>/{{ pageCount }}</span>
     </div>
     <table v-if="shown.length" class="bt-list">

@@ -333,6 +333,11 @@ onBeforeRouteLeave(() => (dirty.value ? confirm('저장하지 않은 설정이 �
           <span class="mh-row"><input v-model="gbExisting" class="mh-input grow" :placeholder="`https://${site!.host}/notes/…`"><button class="mh-btn" @click="useExisting">연결</button></span>
         </label>
       </template>
+      <hr>
+      <label class="mh-field"><span>Wavebox 주소 (선택)</span>
+        <input v-model.trim="draft.waveboxUrl" class="mh-input" placeholder="https://wavebox.me/wave/…">
+      </label>
+      <p class="mh-muted">넣으면 프로필의 박수 옆과 방명록에 💌 버튼이 생겨요. 로그인하지 않은 방문자도 이모지나 메시지를 익명으로 보낼 수 있어요.</p>
     </section>
 
     <section v-show="tab === 'domain'" class="mh-box domain">

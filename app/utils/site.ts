@@ -149,6 +149,8 @@ export interface SiteConfig {
   /** Banners of friends' sites */
   banners: BannerItem[]
   guestbookNoteId: string
+  /** Wavebox (or any anonymous message box) URL: lets visitors send something without logging in */
+  waveboxUrl: string
   /** Only notes with this hashtag show up in Diary ('' = all notes) */
   diaryTag: string
   since: string
@@ -190,6 +192,7 @@ export function defaultConfig(title = ''): SiteConfig {
     myBanner: '',
     banners: [],
     guestbookNoteId: '',
+    waveboxUrl: '',
     diaryTag: '',
     since: '',
     showUpdates: true,
@@ -274,6 +277,7 @@ export function normalizeConfig(raw: unknown, title = ''): SiteConfig {
         })).filter((b: BannerItem) => b.image)
       : [],
     guestbookNoteId: NOTE_ID.test(r.guestbookNoteId) ? r.guestbookNoteId : '',
+    waveboxUrl: safeHttpUrl(str(r.waveboxUrl, 500)) ?? '',
     diaryTag: str(r.diaryTag, 100).replace(/^#/, ''),
     since: str(r.since, 40),
     showUpdates: r.showUpdates !== false,
