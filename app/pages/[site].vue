@@ -88,7 +88,7 @@ watchEffect(() => {
 })
 onBeforeUnmount(() => styleEl?.remove())
 
-useHead({ title: () => (config.value?.title ?? 'mi-house').replace(/:[a-zA-Z0-9_+-]+:/g, '').trim() || 'mi-house' })
+useHead({ title: () => (config.value?.title ?? '이치고아메').replace(/:[a-zA-Z0-9_+-]+:/g, '').trim() || '이치고아메' })
 
 function menuTo(m: MenuItem): string {
   switch (m.type) {
@@ -124,7 +124,7 @@ const activeLabel = computed(() => {
 
 <template>
   <div v-if="error" class="mh-site mh-gaen theme-glass">
-    <div class="gh-stage"><div class="gh-state glass"><p>{{ error }}</p><NuxtLink class="mh-btn" to="/">mi-house 처음으로</NuxtLink></div></div>
+    <div class="gh-stage"><div class="gh-state glass"><p>{{ error }}</p><NuxtLink class="mh-btn" to="/">이치고아메 처음으로</NuxtLink></div></div>
   </div>
   <div v-else-if="loading || !site || !config" class="mh-site mh-gaen theme-glass">
     <div class="gh-stage"><p class="gh-loading">Now Loading…</p></div>
@@ -173,7 +173,7 @@ const activeLabel = computed(() => {
       </div>
       <footer class="gh-foot">
         <MfmText v-if="config.footer" :text="config.footer" />
-        <span><template v-if="config.since">since {{ config.since }} · </template><NuxtLink to="/">mi-house</NuxtLink></span>
+        <span><template v-if="config.since">since {{ config.since }} · </template><NuxtLink to="/">이치고아메</NuxtLink></span>
         <span v-if="usesDandi" title="공공누리 제1유형">font: 부산단디 ⓒ부산광역시</span>
       </footer>
     </template>

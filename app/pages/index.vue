@@ -3,8 +3,10 @@ const { accounts, current, use, remove } = useAccounts()
 const toast = useToast()
 const visit = ref('')
 const loginHost = ref('')
+/** example address shown in the hint, e.g. https://i.chigoa.me/@아이디@서버 */
+const exampleUrl = appUrl('/@아이디@서버')
 
-useHead({ title: 'mi-house — 미스키로 짓는 내 홈페이지' })
+useHead({ title: '이치고아메 — 미스키로 짓는 내 홈페이지' })
 
 function go() {
   const raw = visit.value.trim()
@@ -31,7 +33,7 @@ function login() {
     <div class="frame">
       <header>
         <p class="since">since 2026 · no server · just misskey</p>
-        <h1>mi-house</h1>
+        <h1>이치고아메</h1>
         <p class="lead">미스키 계정의 <b>페이지</b>·<b>갤러리</b>·<b>클립</b>으로 꾸미는 개인 홈페이지</p>
       </header>
 
@@ -41,7 +43,7 @@ function login() {
           <input v-model="visit" class="mh-input grow" placeholder="@username@misskey.example" autocapitalize="off" autocorrect="off" spellcheck="false">
           <button class="mh-btn primary">놀러가기</button>
         </form>
-        <p class="hint">주소는 <code>{{ 'https://이곳/@아이디@서버' }}</code> 모양이에요. 로그인 없이도 볼 수 있어요.</p>
+        <p class="hint">주소는 <code>{{ exampleUrl }}</code> 모양이에요. 로그인 없이도 볼 수 있어요.</p>
       </section>
 
       <section v-if="accounts.length" class="box">
@@ -77,14 +79,16 @@ function login() {
         </dl>
       </section>
 
-      <footer>mi-house · powered by Misskey API · font: 부산단디 ⓒ부산광역시 (공공누리 제1유형)</footer>
+      <footer>이치고아메 · powered by Misskey API · font: 부산단디 ⓒ부산광역시 (공공누리 제1유형)</footer>
     </div>
   </div>
 </template>
 
 <style scoped>
 .landing {
+  display: flex;
   min-height: 100vh;
+  min-height: 100dvh;
   padding: 32px 12px;
   background-color: #fbeff3;
   background-image: radial-gradient(circle, rgb(224 120 154 / 0.25) 1.2px, transparent 1.6px);
@@ -93,7 +97,8 @@ function login() {
 }
 .frame {
   width: min(620px, 100%);
-  margin: 0 auto;
+  /* auto on all sides centres vertically, but stays top-aligned when taller than the screen */
+  margin: auto;
   padding: 18px 22px;
   background: #fff;
   border: 1px dotted var(--accent);
