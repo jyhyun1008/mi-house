@@ -82,13 +82,15 @@ export interface MenuItem {
   url?: string
 }
 
-export type FontId = 'gothic' | 'myeongjo' | 'hand' | 'mona12'
+export type FontId = 'gothic' | 'myeongjo' | 'hand' | 'mona12' | 'pretendard' | 'bonmyeongjo'
 
 export const FONTS: { id: FontId, label: string }[] = [
   { id: 'gothic', label: '부산단디고딕' },
   { id: 'myeongjo', label: '부산단디명조' },
   { id: 'hand', label: '부산단디손글씨' },
   { id: 'mona12', label: 'Mona12 (도트)' },
+  { id: 'pretendard', label: '프리텐다드' },
+  { id: 'bonmyeongjo', label: '본명조 (Noto Serif KR)' },
 ]
 
 /** CSS variables defined in base.css */
@@ -97,6 +99,20 @@ export const FONT_STACKS: Record<FontId, string> = {
   myeongjo: 'var(--font-myeongjo)',
   hand: 'var(--font-hand)',
   mona12: 'var(--font-mona)',
+  pretendard: 'var(--font-pretendard)',
+  bonmyeongjo: 'var(--font-bonmyeongjo)',
+}
+
+/**
+ * Big CJK fonts come as stylesheets split by unicode-range, so a page downloads only the
+ * letters it shows. They're added to the page only when a homepage picks them.
+ */
+export const FONT_SHEETS: Partial<Record<FontId, string[]>> = {
+  pretendard: ['https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css'],
+  bonmyeongjo: [
+    'https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-kr@5.3.1/400.css',
+    'https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-kr@5.3.1/700.css',
+  ],
 }
 
 const FONT_IDS = new Set<string>(Object.keys(FONT_STACKS))

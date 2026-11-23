@@ -76,6 +76,9 @@
   --font-myeongjo: 'BusanDandiMyeongjo', 'Nanum Myeongjo', 'AppleMyungjo', 'Batang', serif;
   --font-hand: 'BusanDandiHandwriting', 'Nanum Pen Script', cursive;
   --font-mona: 'Mona12', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  /* loaded on demand (FONT_SHEETS in utils/site.ts) */
+  --font-pretendard: 'Pretendard Variable', Pretendard, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  --font-bonmyeongjo: 'Noto Serif KR', 'Source Han Serif K', 'Source Han Serif KR', 'Nanum Myeongjo', 'AppleMyungjo', serif;
   --font: var(--font-gothic);
   --font-title: var(--font-myeongjo);
   --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;

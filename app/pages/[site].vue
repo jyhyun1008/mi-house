@@ -131,8 +131,15 @@ function isActive(m: MenuItem) {
   return !config.value!.menu.some(o => o !== m && o.type !== 'link' && decodeURI(menuTo(o)) === here)
 }
 
-/** 공공누리 제1유형 asks for the source wherever the Busan Dandi fonts are shown */
-const usesDandi = computed(() => !!config.value && [config.value.bodyFont, config.value.titleFont].some(f => f !== 'mona12'))
+// stylesheets of the on-demand fonts this homepage uses
+useHead({
+  link: () => {
+    const c = config.value
+    if (!c) return []
+    const urls = new Set([c.bodyFont, c.titleFont].flatMap(f => FONT_SHEETS[f] ?? []))
+    return [...urls].map(href => ({ rel: 'stylesheet', href, key: href }))
+  },
+})
 
 // --- 갠홈 layout: Top is the widget board, every other section opens in a window ---
 const isTop = computed(() => site.value && decodeURI(route.path).replace(/\/$/, '') === path().replace(/\/$/, ''))
@@ -195,7 +202,8 @@ const activeLabel = computed(() => {
       <footer class="gh-foot">
         <MfmText v-if="config.footer" :text="config.footer" />
         <span><template v-if="config.since">since {{ config.since }} · </template><NuxtLink :to="appHome()">이치고아메</NuxtLink></span>
-        <span v-if="usesDandi" title="공공누리 제1유형">font: 부산단디 ⓒ부산광역시</span>
+        <!-- 공공누리 제1유형: the skins always use 부산단디손글씨 for small text -->
+        <span title="공공누리 제1유형">font: 부산단디 ⓒ부산광역시</span>
       </footer>
     </template>
   </div>

@@ -233,7 +233,7 @@ onBeforeRouteLeave(() => (dirty.value ? confirm('저장하지 않은 설정이 �
           </select>
         </label>
       </div>
-      <p class="mh-muted font-note">부제·날짜 같은 작은 글씨는 부산단디손글씨로 나와요. 부산단디 서체 출처: 부산광역시</p>
+      <p class="mh-muted font-note">부제·날짜 같은 작은 글씨는 부산단디손글씨로 나와요. 부산단디 서체 출처: 부산광역시. 프리텐다드·본명조는 고른 홈페이지에서만 불러와요.</p>
       <label class="mh-field"><span>강조색</span><span class="mh-row"><input v-model="draft.accent" type="color"> <code>{{ draft.accent }}</code></span></label>
       <AdminImageField v-model="draft.mainImage" label="메인 이미지" hint="Top 왼쪽 열, 공지 위에 들어가는 대표 그림이에요. 비우면 공지가 그 열을 다 써요." />
       <div v-if="draft.mainImage" class="mh-field">

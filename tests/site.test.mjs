@@ -155,3 +155,13 @@ test('worker script names the homepage and the app', () => {
   assert.match(w, /const APP = 'https:\/\/i\.chigoa\.me'\n/)
   assert.match(w, /HTMLRewriter/)
 })
+
+test('pretendard and bon myeongjo are valid fonts with stylesheets', () => {
+  const c = site.normalizeConfig({ bodyFont: 'pretendard', titleFont: 'bonmyeongjo' })
+  assert.equal(c.bodyFont, 'pretendard')
+  assert.equal(c.titleFont, 'bonmyeongjo')
+  for (const f of ['pretendard', 'bonmyeongjo']) {
+    assert.ok(site.FONT_STACKS[f])
+    assert.ok(site.FONT_SHEETS[f].every(u => u.startsWith('https://cdn.jsdelivr.net/')))
+  }
+})
