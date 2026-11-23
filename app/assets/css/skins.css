@@ -1,0 +1,1245 @@
+/*
+ * 갠홈 layout + themes.
+ *
+ * Layout (.mh-gaen): the Top page is a board of widgets that fills the viewport and is
+ * centred both ways; every other section opens as a large window in the middle.
+ *   .gh-dock   floating icon menu
+ *   .gh-stage  full-screen stage
+ *   .gh-left   fixed left column: .gh-clock .gh-title .gh-profile
+ *   .gh-board  Top widgets in two .gh-col columns: [.gh-visual .gh-notice] [.gh-latest .gh-banner]
+ *   .gh-window section window (.gh-window-bar + .gh-window-body)
+ *   .gh-deco   decorative layer (the frame theme draws its border here)
+ *
+ * Themes (.theme-*) only change tokens and decoration. Owners can add their own CSS on top.
+ */
+
+/* ============================== layout ============================== */
+
+.mh-site {
+  position: relative;
+  min-height: 100dvh;
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+}
+.mh-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mh-gaen {
+  --glass: rgb(255 255 255 / 0.52);
+  --glass-line: rgb(255 255 255 / 0.75);
+  --glass-shadow: 0 8px 30px rgb(40 60 100 / 0.08);
+  --glass-blur: blur(14px) saturate(1.1);
+  --title-font: var(--font);
+  --title-size: clamp(32px, 3.6vw, 64px);
+  --dock-bg: rgb(255 255 255 / 0.78);
+  --window-bg: rgb(255 255 255 / 0.68);
+  --tag-bg: color-mix(in srgb, var(--accent) 75%, #556);
+  font-size: 13px;
+  line-height: 1.7;
+  background-image: var(--site-bg, var(--theme-bg));
+  background-size: var(--site-bg-size, var(--theme-bg-size, cover));
+  background-position: center;
+  background-attachment: fixed;
+}
+.mh-gaen .glass,
+.mh-gaen .gh-window {
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--radius);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+.mh-gaen .gh-deco {
+  display: none;
+}
+
+/* --- dock --- */
+.mh-gaen .gh-dock {
+  position: fixed;
+  left: 24px;
+  top: 50%;
+  z-index: 50;
+  transform: translateY(-50%);
+  padding: 10px 6px;
+  background: var(--dock-bg);
+  border: 1px solid var(--glass-line);
+  border-radius: 999px;
+  box-shadow: 0 6px 24px rgb(40 60 100 / 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.mh-gaen .gh-dock ul {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mh-gaen .gh-dock a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--fg-muted);
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+.mh-gaen .gh-dock .ic {
+  display: flex;
+  line-height: 0;
+}
+.mh-gaen .gh-dock .lb {
+  position: absolute;
+  left: calc(100% + 10px);
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--fg-strong);
+  color: var(--bg);
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-4px);
+  transition: opacity 0.15s, transform 0.15s;
+}
+.mh-gaen .gh-dock a:hover .lb,
+.mh-gaen .gh-dock a:focus-visible .lb {
+  opacity: 1;
+  transform: none;
+}
+.mh-gaen .gh-dock a:hover {
+  background: var(--bg-active);
+  color: var(--fg-strong);
+}
+.mh-gaen .gh-dock a.mh-on {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+/* --- stage --- */
+.mh-gaen .gh-stage {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 48px 48px 112px;
+}
+
+/*
+ * --- shell ---
+ *   [left column]  [top menu strip ............ ]
+ *   [left column]  [Top board / section window ] [category card]
+ * The left column has one width on every page, so the title never jumps.
+ */
+.mh-gaen .gh-shell {
+  --left-w: clamp(240px, 21vw, 330px);
+  display: grid;
+  width: min(1500px, 100%);
+  height: min(calc(100dvh - 88px), 900px);
+  min-height: 560px;
+  gap: 18px;
+  grid-template-columns: var(--left-w) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+}
+.mh-gaen .gh-shell > .gh-left {
+  grid-column: 1;
+  grid-row: 1 / -1;
+}
+.mh-gaen .gh-shell > .gh-pinbar {
+  grid-column: 2 / -1;
+  grid-row: 1;
+}
+.mh-gaen .gh-shell > .gh-board,
+.mh-gaen .gh-shell > .gh-window {
+  grid-column: 2;
+  grid-row: 2;
+}
+.mh-gaen .gh-shell > .gh-cate-slot {
+  grid-column: 3;
+  grid-row: 2;
+}
+.mh-gaen .gh-left {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 18px;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* --- Top board (right area): two columns — [main image, notice] [latest, banner] --- */
+.mh-gaen .gh-board {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  gap: 18px;
+  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+}
+.mh-gaen .gh-col {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+  min-height: 0;
+}
+.mh-gaen .gh-col > .gh-w {
+  flex: 1 1 0;
+}
+.mh-gaen .gh-col > .gh-visual {
+  flex: 1.4 1 0;
+}
+.mh-gaen .gh-col > .gh-latest {
+  flex: 1.25 1 0;
+}
+.mh-gaen .gh-w {
+  min-width: 0;
+  min-height: 0;
+  padding: 18px 20px;
+  overflow: hidden;
+}
+.mh-gaen .gh-h {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--fg-strong);
+}
+/* small labels only the retro theme shows (as window title bars) */
+.mh-gaen .gh-h.minor {
+  display: none;
+}
+.mh-gaen .gh-scroll {
+  height: calc(100% - 30px);
+  overflow: auto;
+  scrollbar-width: thin;
+}
+.mh-gaen .gh-scroll .block {
+  display: block;
+}
+
+.mh-gaen .gh-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 8px;
+}
+.mh-gaen .gh-logo {
+  margin: 0;
+  font-family: var(--title-font);
+  font-size: var(--title-size);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--fg-strong);
+  overflow-wrap: anywhere;
+}
+.mh-gaen .gh-logo a {
+  color: inherit;
+  text-decoration: none;
+}
+.mh-gaen .gh-logo .mfm-emoji {
+  height: 1em;
+}
+.mh-gaen .gh-sub {
+  margin: 14px 0 0;
+  max-width: 30em;
+  font-family: var(--font-hand);
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--fg);
+}
+.mh-gaen .gh-since {
+  margin: 8px 0 0;
+  font-family: var(--font-hand);
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  color: var(--fg-muted);
+}
+
+/* clock: plain text above the site title */
+.mh-gaen .gh-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 4px 8px 0;
+  overflow: visible;
+}
+.mh-gaen .gh-clock .clock {
+  text-align: left;
+}
+.mh-gaen .gh-clock .hm {
+  font-size: 44px;
+}
+
+.mh-gaen .gh-latest {
+  grid-area: latest;
+  display: flex;
+  flex-direction: column;
+}
+.mh-gaen .gh-log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+.mh-gaen .gh-log li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  min-width: 0;
+}
+.mh-gaen .gh-log .tag {
+  flex-shrink: 0;
+  min-width: 62px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--tag-bg);
+  color: #fff;
+  font-size: 10px;
+  text-align: center;
+}
+.mh-gaen .gh-log .tag.k-gallery { background: color-mix(in srgb, var(--tag-bg) 60%, #c77); }
+.mh-gaen .gh-log .tag.k-board { background: color-mix(in srgb, var(--tag-bg) 60%, #7a7); }
+.mh-gaen .gh-log .tag.k-memo { background: color-mix(in srgb, var(--tag-bg) 50%, #99a); }
+.mh-gaen .gh-log .tag.k-guest { background: color-mix(in srgb, var(--tag-bg) 55%, #b8a); }
+.mh-gaen .gh-log .lbl {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg-strong);
+}
+.mh-gaen .gh-log .dots {
+  flex: 1;
+  min-width: 12px;
+  border-bottom: 1px dotted var(--fg-faint);
+  transform: translateY(-3px);
+}
+.mh-gaen .gh-log time {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--fg-muted);
+}
+
+.mh-gaen .gh-notice {
+  grid-area: notice;
+}
+
+.mh-gaen .gh-profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  overflow: auto;
+}
+.mh-gaen .gh-profile .who {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.mh-gaen .gh-profile .av {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.mh-gaen .gh-profile .names {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.mh-gaen .gh-profile .name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--fg-strong);
+}
+.mh-gaen .gh-profile .names .mh-muted {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mh-gaen .gh-banner {
+  grid-area: banner;
+}
+
+.mh-gaen .gh-visual {
+  grid-area: visual;
+  padding: 0;
+  border-radius: var(--radius);
+  box-shadow: var(--glass-shadow);
+}
+.mh-gaen .gh-visual img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* pin bar: one long strip across the top of the right side, like a site's top menu (every page) */
+.mh-gaen .gh-pinbar {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border: 1px solid var(--glass-line);
+  border-radius: var(--radius);
+  background: var(--glass);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+.mh-gaen .gh-pinbar .pin {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 7px;
+  max-width: 280px;
+  padding: 0 16px;
+  color: var(--fg-strong);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+/* thin dividers between entries */
+.mh-gaen .gh-pinbar .pin + .pin::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 30%;
+  bottom: 30%;
+  border-left: 1px solid var(--border);
+}
+/* accent underline on hover */
+.mh-gaen .gh-pinbar .pin::after {
+  content: '';
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 8px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform 0.18s;
+}
+.mh-gaen .gh-pinbar .pin:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+.mh-gaen .gh-pinbar .pin:hover::after {
+  transform: scaleX(1);
+}
+.mh-gaen .gh-pinbar .pin svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+.mh-gaen .gh-pinbar .pin span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* frame: ruled lines above and below, like a letterhead */
+.theme-frame .gh-pinbar {
+  border: 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  border-radius: 0;
+  background: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: 0 3px 0 -2px var(--ink);
+}
+.theme-frame .gh-pinbar .pin {
+  font-family: var(--title-font);
+  letter-spacing: 0.18em;
+}
+/* retro: an old menu bar */
+.theme-retro .gh-pinbar {
+  min-height: 34px;
+  padding: 0;
+  border-color: var(--win-line);
+  background: linear-gradient(#fff, color-mix(in srgb, var(--accent) 10%, #fff));
+}
+.theme-retro .gh-pinbar .pin {
+  padding: 0 12px;
+  font-size: 12px;
+}
+.theme-retro .gh-pinbar .pin::after {
+  display: none;
+}
+.theme-retro .gh-pinbar .pin:hover {
+  background: var(--accent);
+  color: #fff;
+}
+.theme-retro .gh-pinbar .pin:hover svg {
+  color: #fff;
+}
+/* paper: a strip of masking tape */
+.theme-paper .gh-pinbar {
+  position: relative;
+  overflow: visible;
+}
+
+/* pinned notes card under Latest */
+.mh-gaen .gh-col > .gh-pinned {
+  flex: 0 1 auto;
+}
+.mh-gaen .gh-pinned-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mh-gaen .gh-pinned-list button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: var(--fg-strong);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.mh-gaen .gh-pinned-list button:hover {
+  color: var(--accent);
+}
+.mh-gaen .gh-pinned-list svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+.mh-gaen .gh-pinned-list span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* no main image and no avatar: an empty frame keeps the spot */
+.mh-gaen .gh-visual-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 160px;
+  border: 1.5px dashed color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+  font-size: 12px;
+}
+/* the profile picture standing in for a main image */
+.mh-gaen .gh-visual.fallback img {
+  max-width: min(100%, 360px);
+  max-height: min(100%, 360px);
+  border-radius: 50%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+/* centred main image: uncropped and floating, no card around it */
+.mh-gaen .gh-visual.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  overflow: visible;
+  background: none;
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+  transform: none;
+}
+.mh-gaen .gh-visual.center img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 28px color-mix(in srgb, var(--accent) 22%, rgb(0 0 0 / 0.12)));
+}
+
+/* --- category card: its own column beside the window, only when a section has categories --- */
+.mh-gaen .gh-shell.inner:has(.gh-cate-slot .bt-cate) {
+  grid-template-columns: var(--left-w) minmax(0, 1fr) 190px;
+}
+.mh-gaen .gh-cate-slot {
+  min-width: 0;
+  min-height: 0;
+  max-height: 100%;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+.mh-gaen .gh-cate-slot:not(:has(.bt-cate)) {
+  display: none;
+}
+.mh-gaen .gh-cate-slot .bt-cate {
+  --bt-line: color-mix(in srgb, var(--accent) 22%, #cfcfd4);
+  --bt-head: color-mix(in srgb, var(--accent) 70%, #2a2a33);
+  --bt-bar: linear-gradient(color-mix(in srgb, var(--accent) 6%, #ffffff), color-mix(in srgb, var(--accent) 14%, #ececf0));
+  overflow: hidden;
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--radius);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  font-size: 12px;
+}
+.mh-gaen .gh-cate-slot .bt-cate-title {
+  padding: 10px 14px;
+  background: none;
+  border-bottom-color: var(--border);
+  color: var(--fg-strong);
+  font-family: var(--title-font);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+}
+.mh-gaen .gh-cate-slot .bt-cate ul {
+  padding: 8px 4px 10px;
+}
+.mh-gaen .gh-cate-slot .bt-cate li a {
+  padding: 3px 10px;
+  border-radius: calc(var(--radius) * 0.5);
+}
+
+/* --- section window --- */
+.mh-gaen .gh-window {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--window-bg);
+}
+.mh-gaen .gh-window-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 10px 22px;
+  border-bottom: 1px solid var(--border);
+}
+.mh-gaen .gh-window-title {
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.mh-gaen .gh-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: var(--fg-muted);
+  font-size: 20px;
+  text-decoration: none;
+}
+.mh-gaen .gh-close:hover {
+  background: var(--bg-active);
+  color: var(--fg-strong);
+  text-decoration: none;
+}
+.mh-gaen .gh-window-body {
+  flex: 1;
+  overflow: auto;
+  padding: 24px 32px 32px;
+  scrollbar-width: thin;
+}
+.mh-gaen .mh-page-title {
+  font-family: var(--title-font);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.mh-gaen .mh-box {
+  background: var(--glass);
+  border-color: var(--glass-line);
+}
+.mh-gaen .mh-box-title {
+  font-size: 13px;
+  letter-spacing: 0.06em;
+}
+.mh-gaen .mh-btn {
+  border-radius: 999px;
+  background: var(--glass);
+}
+.mh-gaen .mh-btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+}
+.mh-gaen .mh-input,
+.mh-gaen .mh-textarea,
+.mh-gaen .mh-select {
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.75);
+}
+.mh-gaen .mh-grid {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+}
+.mh-gaen .mh-card .mh-thumb {
+  border: 0;
+  border-radius: 10px;
+}
+
+.mh-gaen .gh-foot {
+  position: fixed;
+  right: 20px;
+  bottom: 12px;
+  display: flex;
+  gap: 10px;
+  font-family: var(--font-hand);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--fg-muted);
+}
+.mh-gaen .gh-foot a {
+  color: inherit;
+}
+
+/* ============================== themes ============================== */
+
+/* --- glass: translucent panels over a soft or photo background; everything tinted by the accent --- */
+.theme-glass {
+  --bg: color-mix(in srgb, var(--accent) 12%, #eef1f6);
+  --bg-box: color-mix(in srgb, var(--accent) 8%, rgb(255 255 255 / 0.6));
+  --bg-embed: color-mix(in srgb, var(--accent) 6%, rgb(255 255 255 / 0.5));
+  --bg-hover: color-mix(in srgb, var(--accent) 12%, rgb(255 255 255 / 0.35));
+  --bg-rail: color-mix(in srgb, var(--accent) 8%, rgb(255 255 255 / 0.55));
+  --bg-active: color-mix(in srgb, var(--accent) 26%, transparent);
+  --border: color-mix(in srgb, var(--accent) 32%, rgb(120 130 160 / 0.18));
+  --fg: color-mix(in srgb, var(--accent) 22%, #353b48);
+  --fg-strong: color-mix(in srgb, var(--accent) 42%, #161b27);
+  --fg-muted: color-mix(in srgb, var(--accent) 32%, #7b818f);
+  --fg-faint: color-mix(in srgb, var(--accent) 35%, #b3b8c3);
+  --fg-link: color-mix(in srgb, var(--accent) 85%, #161b27);
+  --radius: 14px;
+  --glass: color-mix(in srgb, var(--accent) 10%, rgb(255 255 255 / 0.5));
+  --glass-line: color-mix(in srgb, var(--accent) 25%, rgb(255 255 255 / 0.7));
+  --glass-shadow: 0 10px 34px color-mix(in srgb, var(--accent) 18%, transparent);
+  --dock-bg: color-mix(in srgb, var(--accent) 8%, rgb(255 255 255 / 0.8));
+  --window-bg: color-mix(in srgb, var(--accent) 7%, rgb(255 255 255 / 0.68));
+  --tag-bg: var(--accent);
+  --theme-bg:
+    radial-gradient(ellipse 60% 50% at 18% 22%, color-mix(in srgb, var(--accent) 45%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 60% at 85% 80%, color-mix(in srgb, var(--accent) 35%, transparent), transparent 70%),
+    linear-gradient(160deg, color-mix(in srgb, var(--accent) 6%, #f7f8fb), color-mix(in srgb, var(--accent) 24%, #e4e7ee));
+}
+.theme-glass .gh-h {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.theme-glass .gh-h::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.theme-glass .gh-logo {
+  color: color-mix(in srgb, var(--accent) 55%, #161b27);
+}
+
+/* --- paper: scrapbook — paper grain, cards, masking tape in the accent colour --- */
+.theme-paper {
+  --bg: color-mix(in srgb, var(--accent) 9%, #f2ece2);
+  --bg-box: color-mix(in srgb, var(--accent) 3%, #fffdf8);
+  --bg-embed: color-mix(in srgb, var(--accent) 6%, #f8f3ea);
+  --bg-hover: color-mix(in srgb, var(--accent) 10%, transparent);
+  --bg-rail: color-mix(in srgb, var(--accent) 6%, #f3ede3);
+  --bg-active: color-mix(in srgb, var(--accent) 22%, transparent);
+  --border: color-mix(in srgb, var(--accent) 28%, rgb(150 120 90 / 0.2));
+  --fg: color-mix(in srgb, var(--accent) 15%, #5b4b3e);
+  --fg-strong: color-mix(in srgb, var(--accent) 28%, #3a2d24);
+  --fg-muted: color-mix(in srgb, var(--accent) 25%, #9a8775);
+  --fg-faint: color-mix(in srgb, var(--accent) 25%, #c9baa9);
+  --fg-link: color-mix(in srgb, var(--accent) 85%, #3a2d24);
+  --radius: 6px;
+  --glass: color-mix(in srgb, var(--accent) 4%, rgb(255 253 248 / 0.94));
+  --glass-line: color-mix(in srgb, var(--accent) 22%, rgb(150 120 90 / 0.15));
+  --glass-shadow: 0 2px 2px rgb(90 70 40 / 0.05), 0 8px 22px color-mix(in srgb, var(--accent) 14%, rgb(90 70 40 / 0.06));
+  --glass-blur: none;
+  --dock-bg: color-mix(in srgb, var(--accent) 4%, #fffdf8);
+  --window-bg: color-mix(in srgb, var(--accent) 3%, rgb(255 253 248 / 0.97));
+  --tag-bg: color-mix(in srgb, var(--accent) 85%, #6b5443);
+  --tape: color-mix(in srgb, var(--accent) 60%, rgb(240 225 200 / 0.8));
+  --theme-bg:
+    radial-gradient(ellipse 40% 30% at 12% 8%, rgb(255 255 255 / 0.7), transparent 70%),
+    radial-gradient(ellipse 45% 45% at 90% 92%, color-mix(in srgb, var(--accent) 28%, transparent), transparent 70%),
+    radial-gradient(ellipse 30% 30% at 30% 85%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%),
+    repeating-linear-gradient(90deg, rgb(120 90 60 / 0.018) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(0deg, rgb(120 90 60 / 0.02) 0 1px, transparent 1px 4px),
+    linear-gradient(color-mix(in srgb, var(--accent) 6%, #f4eee5), color-mix(in srgb, var(--accent) 12%, #ede5d8));
+}
+.theme-paper .gh-logo {
+  color: color-mix(in srgb, var(--accent) 60%, #3a2d24);
+  letter-spacing: -0.02em;
+}
+.theme-paper .gh-h {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0 4px 2px;
+  color: color-mix(in srgb, var(--accent) 75%, #3a2d24);
+  background: linear-gradient(transparent 60%, color-mix(in srgb, var(--accent) 22%, transparent) 60%);
+}
+.theme-paper .gh-w.glass {
+  overflow: visible;
+}
+.theme-paper .gh-profile {
+  overflow: visible;
+}
+/* masking tape on a few cards */
+.theme-paper .gh-cate-slot {
+  overflow: visible;
+}
+.theme-paper .gh-cate-slot .bt-cate {
+  position: relative;
+  overflow: visible;
+}
+.theme-paper .gh-cate-slot .bt-cate::before,
+.theme-paper .gh-notice::before,
+.theme-paper .gh-banner::before,
+.theme-paper .gh-profile::before,
+.theme-paper .gh-window::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 86px;
+  height: 22px;
+  transform: translateX(-50%) rotate(-3deg);
+  background:
+    repeating-linear-gradient(45deg, rgb(255 255 255 / 0.35) 0 6px, transparent 6px 12px),
+    var(--tape);
+  opacity: 0.88;
+  box-shadow: 0 1px 2px rgb(90 70 40 / 0.1);
+}
+.theme-paper .gh-w,
+.theme-paper .gh-window {
+  position: relative;
+}
+.theme-paper .gh-notice::before {
+  left: 22%;
+  transform: translateX(-50%) rotate(4deg);
+}
+.theme-paper .gh-profile::before {
+  left: auto;
+  right: -14px;
+  top: 14px;
+  transform: rotate(38deg);
+  width: 64px;
+}
+.theme-paper .gh-window {
+  overflow: visible;
+}
+.theme-paper .gh-window-body {
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+.theme-paper .gh-banner {
+  transform: rotate(0.6deg);
+}
+.theme-paper .gh-visual {
+  padding: 8px 8px 28px;
+  background: #fffdf8;
+  transform: rotate(1.2deg);
+}
+.theme-paper .gh-dock {
+  border: 1px dashed color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+/* --- frame: an antique frame around the whole screen, inked in the accent colour --- */
+.theme-frame {
+  --ink: color-mix(in srgb, var(--accent) 70%, #121826);
+  --bg: color-mix(in srgb, var(--accent) 9%, #eef0f4);
+  --bg-box: rgb(255 255 255 / 0.4);
+  --bg-embed: rgb(255 255 255 / 0.35);
+  --bg-hover: color-mix(in srgb, var(--ink) 7%, transparent);
+  --bg-rail: rgb(255 255 255 / 0.4);
+  --bg-active: color-mix(in srgb, var(--ink) 14%, transparent);
+  --border: color-mix(in srgb, var(--ink) 26%, transparent);
+  --fg: color-mix(in srgb, var(--ink) 75%, #555);
+  --fg-strong: var(--ink);
+  --fg-muted: color-mix(in srgb, var(--ink) 50%, #9a9a9a);
+  --fg-faint: color-mix(in srgb, var(--ink) 30%, #c4c4c4);
+  --fg-link: var(--ink);
+  --radius: 2px;
+  --glass: color-mix(in srgb, var(--accent) 5%, rgb(255 255 255 / 0.3));
+  --glass-line: color-mix(in srgb, var(--ink) 22%, transparent);
+  --glass-shadow: none;
+  --glass-blur: blur(2px);
+  --dock-bg: rgb(255 255 255 / 0.5);
+  --window-bg: color-mix(in srgb, var(--accent) 4%, rgb(248 249 251 / 0.88));
+  --tag-bg: var(--ink);
+  --theme-bg:
+    radial-gradient(ellipse 70% 60% at 50% 45%, rgb(255 255 255 / 0.6), transparent 75%),
+    radial-gradient(ellipse 55% 45% at 15% 90%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 70%),
+    radial-gradient(ellipse 45% 40% at 90% 10%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 70%),
+    linear-gradient(175deg, color-mix(in srgb, var(--accent) 5%, #f3f4f7), color-mix(in srgb, var(--accent) 16%, #dde1e8));
+}
+.theme-frame .gh-deco {
+  display: block;
+  position: fixed;
+  inset: 16px;
+  z-index: 40;
+  pointer-events: none;
+  border: 3px double var(--ink);
+  opacity: 0.8;
+}
+.theme-frame .gh-deco::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid var(--ink);
+  opacity: 0.6;
+}
+.theme-frame .gh-deco i {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  background: var(--bg);
+  color: var(--ink);
+  font-style: normal;
+  font-size: 30px;
+  line-height: 34px;
+  text-align: center;
+}
+.theme-frame .gh-deco i::before {
+  content: '❦\FE0E';
+}
+.theme-frame .gh-deco i:nth-child(1) { top: -17px; left: -17px; transform: rotate(135deg); }
+.theme-frame .gh-deco i:nth-child(2) { top: -17px; right: -17px; transform: rotate(-135deg); }
+.theme-frame .gh-deco i:nth-child(3) { bottom: -17px; left: -17px; transform: rotate(45deg); }
+.theme-frame .gh-deco i:nth-child(4) { bottom: -17px; right: -17px; transform: rotate(-45deg); }
+.theme-frame .gh-stage {
+  padding: 64px 72px 64px 132px;
+}
+.theme-frame .gh-shell {
+  height: min(calc(100dvh - 128px), 880px);
+}
+.theme-frame .gh-shell {
+  --left-w: clamp(230px, 19vw, 310px);
+}
+.theme-frame .gh-dock {
+  left: 44px;
+  border-radius: 2px;
+  box-shadow: none;
+  border-color: var(--border);
+}
+.theme-frame .gh-dock a {
+  border-radius: 2px;
+}
+.theme-frame .gh-dock a.mh-on {
+  background: var(--ink);
+}
+.theme-frame .gh-logo {
+  font-weight: 300;
+  font-size: clamp(40px, 4.4vw, 80px);
+  letter-spacing: 0.02em;
+}
+.theme-frame .gh-sub {
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.theme-frame .gh-h,
+.theme-frame .mh-box-title {
+  font-family: var(--title-font);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.theme-frame .gh-cate-slot .bt-cate-title {
+  letter-spacing: 0.35em;
+  font-weight: 500;
+}
+.theme-frame .gh-cate-slot .bt-cate-title::before {
+  content: '— ';
+  color: var(--accent);
+}
+.theme-frame .gh-h::before {
+  content: '— ';
+  color: var(--accent);
+}
+.theme-frame .gh-clock .hm {
+  font-weight: 300;
+}
+.theme-frame .gh-log .tag {
+  border-radius: 0;
+  letter-spacing: 0.05em;
+}
+.theme-frame .gh-visual {
+  border-radius: 0;
+  outline: 1px solid var(--ink);
+  outline-offset: 5px;
+}
+.theme-frame .gh-window {
+  outline: 1px solid var(--border);
+  outline-offset: 4px;
+}
+.theme-frame .gh-foot {
+  right: 48px;
+  bottom: 30px;
+}
+.theme-frame .mh-btn {
+  border-radius: 2px;
+}
+
+/* --- retro: little windows with title bars, dotted pastel desktop --- */
+.theme-retro {
+  --bg: color-mix(in srgb, var(--accent) 8%, #fffafc);
+  --bg-box: #fff;
+  --bg-embed: color-mix(in srgb, var(--accent) 5%, #fff);
+  --bg-hover: color-mix(in srgb, var(--accent) 8%, transparent);
+  --bg-rail: color-mix(in srgb, var(--accent) 6%, #fff);
+  --bg-active: color-mix(in srgb, var(--accent) 18%, #fff);
+  --border: color-mix(in srgb, var(--accent) 35%, #ddd);
+  --fg: #55505a;
+  --fg-strong: #333038;
+  --fg-muted: #9a8f9c;
+  --fg-faint: #c8bfca;
+  --fg-link: color-mix(in srgb, var(--accent) 85%, #333);
+  --radius: 0;
+  --win-line: color-mix(in srgb, var(--accent) 65%, #555);
+  --glass: #fff;
+  --glass-line: var(--win-line);
+  --glass-shadow: 3px 3px 0 color-mix(in srgb, var(--accent) 30%, transparent);
+  --glass-blur: none;
+  --dock-bg: #fff;
+  --window-bg: #fff;
+  --tag-bg: var(--accent);
+  --theme-bg:
+    radial-gradient(circle, color-mix(in srgb, var(--accent) 24%, transparent) 1.2px, transparent 1.7px),
+    linear-gradient(var(--bg), var(--bg));
+  --theme-bg-size: 14px 14px, cover;
+}
+.theme-retro .gh-h,
+.theme-retro .gh-window-bar {
+  display: flex;
+  align-items: center;
+  margin: -18px -20px 12px;
+  padding: 3px 8px;
+  border-bottom: 1px solid var(--win-line);
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 45%, #fff));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.theme-retro .gh-h.minor {
+  display: flex;
+}
+.theme-retro .gh-cate-slot .bt-cate-title {
+  padding: 3px 8px;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 45%, #fff));
+  border-bottom: 1px solid var(--win-line);
+  color: #fff;
+  font-family: var(--font);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+.theme-retro .gh-cate-slot .bt-cate-title::before {
+  content: '◆\FE0E  ';
+  color: #fff;
+  font-size: 9px;
+}
+.theme-retro .gh-h {
+  align-self: stretch;
+}
+.theme-retro .gh-h::before {
+  content: '◆\FE0E';
+  margin-right: 6px;
+  font-size: 9px;
+}
+.theme-retro .gh-h::after {
+  content: '_ □ ×';
+  margin-left: auto;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  opacity: 0.85;
+}
+.theme-retro .gh-window-bar {
+  margin: 0;
+  padding: 4px 6px 4px 10px;
+}
+.theme-retro .gh-window-title {
+  color: #fff;
+  letter-spacing: 0.15em;
+}
+.theme-retro .gh-close {
+  width: 20px;
+  height: 18px;
+  border: 1px solid var(--win-line);
+  border-radius: 0;
+  background: #fff;
+  color: var(--win-line);
+  font-size: 14px;
+}
+.theme-retro .gh-profile {
+  justify-content: flex-start;
+}
+.theme-retro .gh-logo {
+  color: var(--accent);
+  text-shadow: 3px 3px 0 #fff, 4px 4px 0 color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.theme-retro .gh-since {
+  font-style: normal;
+}
+.theme-retro .gh-dock {
+  border-radius: 0;
+  border-color: var(--win-line);
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.theme-retro .gh-dock a {
+  border-radius: 0;
+}
+.theme-retro .gh-log .tag {
+  border-radius: 0;
+}
+.theme-retro .gh-log .tag::before {
+  content: '[';
+}
+.theme-retro .gh-log .tag::after {
+  content: ']';
+}
+.theme-retro .gh-visual {
+  border: 1px solid var(--win-line);
+  border-radius: 0;
+  padding: 4px;
+  background: #fff;
+}
+.theme-retro .mh-btn,
+.theme-retro .mh-input,
+.theme-retro .mh-textarea,
+.theme-retro .mh-select {
+  border-radius: 0;
+}
+.theme-retro .mh-box {
+  border-style: dotted;
+}
+
+/* ============================== small screens ============================== */
+
+@media (max-width: 1000px), (max-height: 620px) {
+  .mh-gaen .gh-shell,
+  .theme-frame .gh-shell {
+    height: auto;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+  .mh-gaen .gh-shell > * {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .mh-gaen .gh-shell > .gh-pinbar {
+    order: 1;
+  }
+  .mh-gaen .gh-shell > .gh-board {
+    order: 3;
+  }
+  .mh-gaen .gh-left {
+    grid-template-rows: none;
+  }
+  /* inside a section, keep only the title on top so the content comes first */
+  .mh-gaen .gh-shell.inner .gh-profile {
+    display: none;
+  }
+  .mh-gaen .gh-shell.inner .gh-title {
+    padding: 4px 8px;
+  }
+  .mh-gaen .gh-shell.inner .gh-logo {
+    font-size: 28px;
+  }
+  .mh-gaen .gh-col > .gh-w {
+    flex: none;
+  }
+  .mh-gaen .gh-visual.center img {
+    max-height: 60vh;
+  }
+  .mh-gaen .gh-visual {
+    max-height: 260px;
+  }
+  .mh-gaen .gh-scroll {
+    height: auto;
+    max-height: 50vh;
+  }
+  .mh-gaen .gh-window {
+    min-height: 70vh;
+    order: 3;
+  }
+  .mh-gaen .gh-shell.inner:has(.gh-cate-slot .bt-cate) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .mh-gaen .gh-cate-slot {
+    order: 2;
+    max-height: none;
+  }
+  .mh-gaen .gh-window-body {
+    overflow: visible;
+  }
+}
+@media (max-width: 720px) {
+  .mh-gaen .gh-stage,
+  .theme-frame .gh-stage {
+    align-items: flex-start;
+    padding: 20px 14px 96px;
+  }
+  .theme-frame .gh-stage {
+    padding: 40px 30px 110px;
+  }
+  .mh-gaen .gh-board {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .mh-gaen .gh-dock,
+  .theme-frame .gh-dock {
+    left: 50%;
+    top: auto;
+    bottom: 12px;
+    max-width: calc(100vw - 24px);
+    transform: translateX(-50%);
+    padding: 4px 8px;
+    overflow-x: auto;
+  }
+  .theme-frame .gh-dock {
+    bottom: 34px;
+  }
+  .mh-gaen .gh-dock ul {
+    flex-direction: row;
+  }
+  .mh-gaen .gh-dock .lb {
+    display: none;
+  }
+  .mh-gaen .gh-window-body {
+    padding: 16px;
+  }
+  .mh-gaen .gh-foot {
+    display: none;
+  }
+  .theme-frame .gh-deco {
+    inset: 8px;
+  }
+  .mh-table .hide-sm {
+    display: none;
+  }
+}

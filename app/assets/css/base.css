@@ -1,0 +1,771 @@
+/* 부산단디 서체 — 출처: 부산광역시 (공공누리 제1유형: 출처표시). Files served by noonnu on jsDelivr. */
+@font-face {
+  font-family: 'BusanDandiGothic';
+  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/2610132210@l/l/%EB%B6%80%EC%82%B0%EB%8B%A8%EB%94%94%EA%B3%A0%EB%94%95L.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BusanDandiGothic';
+  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/2610132210@l/l/%EB%B6%80%EC%82%B0%EB%8B%A8%EB%94%94%EA%B3%A0%EB%94%95M.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BusanDandiGothic';
+  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/2610132210@l/l/%EB%B6%80%EC%82%B0%EB%8B%A8%EB%94%94%EA%B3%A0%EB%94%95B.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BusanDandiMyeongjo';
+  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/2610132210@l-2/l/%EB%B6%80%EC%82%B0%EB%8B%A8%EB%94%94%EB%AA%85%EC%A1%B0L.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BusanDandiMyeongjo';
+  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/2610132210@l-2/l/%EB%B6%80%EC%82%B0%EB%8B%A8%EB%94%94%EB%AA%85%EC%A1%B0M.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BusanDandiMyeongjo';
+  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/2610132210@l-2/l/%EB%B6%80%EC%82%B0%EB%8B%A8%EB%94%94%EB%AA%85%EC%A1%B0B.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BusanDandiHandwriting';
+  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/2610132210@font-342/font-342/%EB%B6%80%EC%82%B0%EB%8B%A8%EB%94%94%EC%86%90%EA%B8%80%EC%94%A8.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mona12';
+  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/2611030023@color-1792-1712/color-1792-1712/Mona12.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mona12';
+  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/2611030026@color-1792-1713/color-1792-1713/Mona12.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* Shared tokens. Each skin (skins.css) overrides them on .mh-site. */
+:root {
+  --accent: #e0789a;
+  --accent-fg: #fff;
+  --accent-soft: color-mix(in srgb, var(--accent) 15%, transparent);
+  --bg: #fdf7f9;
+  --bg-box: #fff;
+  --bg-embed: #f6f1f3;
+  --bg-hover: color-mix(in srgb, var(--accent) 8%, transparent);
+  --bg-rail: #f3eef0;
+  --bg-active: #e7dde1;
+  --fg: #444;
+  --fg-strong: #222;
+  --fg-muted: #888;
+  --fg-faint: #aaa;
+  --fg-link: var(--accent);
+  --border: #e2d6db;
+  --radius: 0;
+  --font-gothic: 'BusanDandiGothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  --font-myeongjo: 'BusanDandiMyeongjo', 'Nanum Myeongjo', 'AppleMyungjo', 'Batang', serif;
+  --font-hand: 'BusanDandiHandwriting', 'Nanum Pen Script', cursive;
+  --font-mona: 'Mona12', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  --font: var(--font-gothic);
+  --font-title: var(--font-myeongjo);
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 13px;
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+
+a {
+  color: var(--fg-link);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+.twemoji {
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  vertical-align: -0.2em;
+}
+
+/* --- generic pieces every view uses; skins restyle them --- */
+
+.mh-muted {
+  color: var(--fg-muted);
+}
+
+.mh-box {
+  background: var(--bg-box);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  min-width: 0;
+}
+.mh-box + .mh-box {
+  margin-top: 14px;
+}
+.mh-box-title {
+  margin: 0 0 10px;
+  font-size: 1em;
+  font-weight: bold;
+  color: var(--fg-strong);
+}
+
+.mh-page-title {
+  margin: 0 0 14px;
+  font-family: var(--font-title);
+  font-size: 1.6em;
+  font-weight: normal;
+  color: var(--fg-strong);
+  letter-spacing: 0.04em;
+}
+
+.mh-heading {
+  margin: 0;
+  color: var(--fg-strong);
+}
+h2.mh-heading { font-size: 1.35em; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+h3.mh-heading { font-size: 1.15em; }
+h4.mh-heading { font-size: 1em; }
+
+.mh-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-box);
+  color: var(--fg);
+  cursor: pointer;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+.mh-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.mh-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.mh-btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+}
+.mh-btn.primary:hover:not(:disabled) {
+  color: var(--accent-fg);
+  filter: brightness(1.08);
+}
+.mh-btn.danger:hover:not(:disabled) {
+  border-color: #d33;
+  color: #d33;
+}
+.mh-btn.small {
+  padding: 1px 8px;
+  font-size: 0.9em;
+}
+
+.mh-input,
+.mh-textarea,
+.mh-select {
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-box);
+  color: var(--fg);
+}
+.mh-input:focus,
+.mh-textarea:focus,
+.mh-select:focus {
+  outline: 2px solid var(--accent-soft);
+  border-color: var(--accent);
+}
+.mh-textarea {
+  min-height: 90px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.mh-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.mh-field > span:first-child {
+  font-weight: bold;
+  color: var(--fg-strong);
+}
+.mh-field small {
+  color: var(--fg-muted);
+}
+.mh-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.mh-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.mh-spacer {
+  flex: 1;
+}
+
+/* board-style list (번호 / 제목 / 날짜) */
+.mh-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.mh-table th,
+.mh-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: middle;
+}
+.mh-table th {
+  font-weight: bold;
+  color: var(--fg-strong);
+  white-space: nowrap;
+}
+.mh-table .num,
+.mh-table .date,
+.mh-table .cnt {
+  width: 1%;
+  white-space: nowrap;
+  text-align: center;
+  color: var(--fg-muted);
+}
+.mh-table tbody tr:hover td {
+  background: var(--bg-hover);
+}
+
+/* thumbnail grid (gallery / scrapbook) */
+.mh-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+.mh-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none !important;
+}
+.mh-card .mh-thumb {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-embed);
+}
+.mh-card .mh-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.2s;
+}
+.mh-card:hover .mh-thumb img {
+  transform: scale(1.04);
+}
+.mh-card .mh-thumb.nsfw img {
+  filter: blur(14px);
+}
+.mh-card .mh-thumb .badge {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  padding: 0 5px;
+  background: rgb(0 0 0 / 0.55);
+  color: #fff;
+  font-size: 11px;
+}
+.mh-card .cap {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mh-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.mh-tabs button {
+  padding: 6px 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  cursor: pointer;
+  color: var(--fg-muted);
+}
+.mh-tabs button.on {
+  border-bottom-color: var(--accent);
+  color: var(--fg-strong);
+  font-weight: bold;
+}
+
+.mh-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.mh-empty {
+  padding: 24px 0;
+  text-align: center;
+  color: var(--fg-muted);
+}
+
+.mh-list {
+  display: flex;
+  flex-direction: column;
+}
+.mh-list > * {
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.mh-list > *:last-child {
+  border-bottom: 0;
+}
+
+/* ======================================================================
+ * 비툴 board kit — zeroboard-era community board look (gallery, board, diary).
+ * Thin 1px lines, gradient header bars, small bold type; tinted by the accent.
+ * ====================================================================== */
+.bt {
+  --bt-line: color-mix(in srgb, var(--accent) 22%, #cfcfd4);
+  --bt-head: color-mix(in srgb, var(--accent) 70%, #2a2a33);
+  --bt-bar: linear-gradient(color-mix(in srgb, var(--accent) 6%, #ffffff), color-mix(in srgb, var(--accent) 14%, #ececf0));
+  font-size: 12px;
+  line-height: 1.6;
+}
+.bt-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.bt-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.bt-title {
+  margin: 0;
+  font-family: var(--title-font, var(--font));
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--fg-strong);
+}
+.bt-title small {
+  margin-left: 6px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--fg-muted);
+}
+.bt-total {
+  font-family: Tahoma, Verdana, var(--font);
+  font-size: 11px;
+  color: var(--fg-muted);
+}
+.bt-total b {
+  color: var(--accent);
+}
+.bt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 9px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, #a8a8b0);
+  border-radius: 2px;
+  background: linear-gradient(#ffffff, color-mix(in srgb, var(--accent) 8%, #e9e9ee));
+  color: var(--fg-strong);
+  font-size: 11px;
+  line-height: 18px;
+  cursor: pointer;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+.bt-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.bt-btn.strong {
+  border-color: var(--bt-head);
+  background: linear-gradient(color-mix(in srgb, var(--accent) 75%, #fff), var(--accent));
+  color: #fff;
+}
+.bt-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* gallery grid: bordered cells with a framed thumbnail, title and a little info line */
+.bt-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  border-top: 2px solid var(--bt-head);
+  border-left: 1px solid var(--bt-line);
+  background: var(--bg-box);
+}
+.bt-cell {
+  min-width: 0;
+  padding: 10px 10px 8px;
+  border-right: 1px solid var(--bt-line);
+  border-bottom: 1px solid var(--bt-line);
+  text-align: center;
+  color: inherit;
+  text-decoration: none !important;
+}
+.bt-cell:hover {
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+}
+.bt-thumb {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  padding: 3px;
+  border: 1px solid var(--bt-line);
+  background: #fff;
+}
+.bt-cell:hover .bt-thumb {
+  border-color: var(--accent);
+}
+.bt-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.bt-noimg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 6px;
+  background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--accent) 6%, #fff) 0 6px, #fff 6px 12px);
+  color: var(--fg-muted);
+  font-family: Tahoma, Verdana, var(--font);
+  font-size: 10px;
+  line-height: 1.4;
+}
+.bt-thumb.nsfw img {
+  filter: blur(12px);
+}
+.bt-thumb .bt-badge {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  padding: 0 4px;
+  background: rgb(0 0 0 / 0.6);
+  color: #fff;
+  font-family: Tahoma, Verdana, sans-serif;
+  font-size: 10px;
+}
+.bt-subj {
+  display: block;
+  margin-top: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+  color: var(--fg-strong);
+}
+.bt-info {
+  display: block;
+  font-family: Tahoma, Verdana, var(--font);
+  font-size: 10px;
+  color: var(--fg-muted);
+}
+.bt-new {
+  margin-left: 3px;
+  padding: 0 3px;
+  background: #e8483a;
+  color: #fff;
+  font-family: Tahoma, Verdana, sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  vertical-align: 1px;
+}
+.bt-empty {
+  padding: 40px 0;
+  border-top: 2px solid var(--bt-head);
+  border-bottom: 1px solid var(--bt-line);
+  text-align: center;
+  color: var(--fg-muted);
+}
+
+.bt-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+}
+.bt-paging {
+  margin: 14px 0 8px;
+  text-align: center;
+  font-family: Tahoma, Verdana, var(--font);
+  font-size: 12px;
+}
+.bt-paging a,
+.bt-paging b {
+  display: inline-block;
+  padding: 0 5px;
+  color: var(--fg-muted);
+}
+.bt-paging .cur {
+  color: var(--accent);
+}
+.bt-paging .arrow {
+  font-size: 11px;
+}
+.bt-search {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+.bt-search select,
+.bt-search input {
+  height: 22px;
+  padding: 0 6px;
+  border: 1px solid var(--bt-line);
+  border-radius: 0;
+  background: #fff;
+  font-size: 11px;
+}
+.bt-search input {
+  width: 150px;
+}
+
+/* board list table: No. / Title / Date / ♡ */
+.bt-list {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 2px solid var(--bt-head);
+}
+.bt-list th {
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--bt-line);
+  background: var(--bt-bar);
+  color: var(--bt-head);
+  font-family: Tahoma, Verdana, var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+}
+.bt-list td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--bt-line);
+  vertical-align: middle;
+}
+.bt-list tbody tr:hover td {
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+}
+.bt-list .num,
+.bt-list .date,
+.bt-list .cnt {
+  width: 1%;
+  white-space: nowrap;
+  text-align: center;
+  font-family: Tahoma, Verdana, var(--font);
+  font-size: 11px;
+  color: var(--fg-muted);
+}
+.bt-list .subj {
+  max-width: 0;
+  width: 100%;
+}
+.bt-list .subj a {
+  color: var(--fg-strong);
+}
+.bt-list .subj a:hover {
+  color: var(--accent);
+}
+
+/* category box on the right */
+.bt-cate {
+  border: 1px solid var(--bt-line);
+  background: var(--bg-box);
+  font-size: 12px;
+}
+.bt-cate-title {
+  margin: 0;
+  padding: 4px 10px;
+  border-bottom: 1px solid var(--bt-line);
+  background: var(--bt-bar);
+  color: var(--bt-head);
+  font-family: Tahoma, Verdana, var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.bt-cate-title::before {
+  content: '■ ';
+  color: var(--accent);
+}
+.bt-cate ul {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+}
+.bt-cate li a {
+  display: block;
+  padding: 2px 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg);
+}
+.bt-cate li a::before {
+  content: '· ';
+  color: var(--fg-faint);
+}
+.bt-cate li a:hover {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  text-decoration: none;
+}
+.bt-cate li.on a {
+  color: var(--accent);
+  font-weight: 700;
+}
+.bt-cate small {
+  color: var(--fg-muted);
+  font-family: Tahoma, Verdana, var(--font);
+  font-size: 10px;
+}
+.bt-cate-empty {
+  margin: 0;
+  padding: 4px 10px 8px;
+  color: var(--fg-muted);
+  font-size: 11px;
+}
+
+/* post view: subject bar + writer row, like a board's view page */
+.bt-view {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 2px solid var(--bt-head);
+}
+.bt-view th {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--bt-line);
+  background: var(--bt-bar);
+  color: var(--fg-strong);
+  font-size: 13px;
+  text-align: left;
+}
+.bt-view td {
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--bt-line);
+  color: var(--fg-muted);
+  font-size: 11px;
+}
+.bt-view td.r {
+  text-align: right;
+  white-space: nowrap;
+}
+.bt-view td b {
+  color: var(--fg-strong);
+}
+.bt-body {
+  padding: 18px 10px;
+  border-bottom: 1px solid var(--bt-line);
+}
+.bt-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+.bt-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  margin-top: 14px;
+  font-size: 11px;
+}
+
+@media (max-width: 760px) {
+  /* categories turn into a row of chips */
+  .bt-cate-empty {
+    display: none;
+  }
+  .bt-cate ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 0;
+  }
+  .bt-cate ul {
+    padding: 8px;
+  }
+  .bt-cate li a {
+    padding: 1px 8px;
+    border: 1px solid var(--bt-line);
+    background: var(--bg-box);
+  }
+  .bt-cate li a::before {
+    content: none;
+  }
+  .bt-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .bt-list .hide-sm {
+    display: none;
+  }
+}
