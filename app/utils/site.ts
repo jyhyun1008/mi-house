@@ -18,6 +18,16 @@ export const SKINS: { id: Skin, label: string, desc: string }[] = [
   { id: 'retro', label: '레트로', desc: '제목 표시줄 달린 작은 창들. 그 시절 갠홈 느낌.' },
 ]
 
+/** Moving decoration behind the content, on top of the skin's background. Works with any skin. */
+export type BgEffect = 'none' | 'sparkle' | 'notes' | 'bubbles'
+
+export const BG_EFFECTS: { id: BgEffect, label: string, desc: string }[] = [
+  { id: 'none', label: '없음', desc: '스킨 배경 그대로.' },
+  { id: 'sparkle', label: '반짝이', desc: '별빛이 여기저기서 반짝여요.' },
+  { id: 'notes', label: '음표', desc: '음표가 천천히 떠올라요.' },
+  { id: 'bubbles', label: '비눗방울', desc: '동글동글 방울이 올라가요.' },
+]
+
 /** Skins from earlier versions → the closest theme */
 const LEGACY_SKINS: Record<string, Skin> = { gaenhome: 'glass', avocado: 'glass', simple: 'paper', bitool: 'frame', doujin: 'retro' }
 
@@ -90,6 +100,7 @@ export interface SiteConfig {
   title: string
   subtitle: string
   skin: Skin
+  bgEffect: BgEffect
   /** body text */
   bodyFont: FontId
   /** site title and headings */
@@ -127,6 +138,7 @@ export function defaultConfig(title = ''): SiteConfig {
     title: title || 'My Homepage',
     subtitle: 'welcome to my house',
     skin: 'glass',
+    bgEffect: 'none',
     bodyFont: 'gothic',
     titleFont: 'myeongjo',
     accent: '#5b7fc0',
@@ -159,6 +171,7 @@ export function defaultConfig(title = ''): SiteConfig {
 }
 
 const SKIN_IDS = new Set(SKINS.map(s => s.id))
+const BG_EFFECT_IDS = new Set<string>(BG_EFFECTS.map(e => e.id))
 const MENU_IDS = new Set(MENU_TYPES.map(m => m.type))
 const str = (v: unknown, max = 2000) => (typeof v === 'string' ? v.slice(0, max) : '')
 const HEX = /^#[0-9a-f]{6}$/i
@@ -190,6 +203,7 @@ export function normalizeConfig(raw: unknown, title = ''): SiteConfig {
     title: str(r.title, 80) || d.title,
     subtitle: str(r.subtitle, 200),
     skin: SKIN_IDS.has(r.skin) ? r.skin : LEGACY_SKINS[r.skin] ?? d.skin,
+    bgEffect: BG_EFFECT_IDS.has(r.bgEffect) ? r.bgEffect : d.bgEffect,
     bodyFont: FONT_IDS.has(r.bodyFont) ? r.bodyFont : d.bodyFont,
     titleFont: FONT_IDS.has(r.titleFont) ? r.titleFont : d.titleFont,
     accent: HEX.test(r.accent) ? r.accent : d.accent,

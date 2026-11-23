@@ -133,6 +133,7 @@ const activeLabel = computed(() => {
   <div v-else class="mh-site mh-gaen" :class="`theme-${config.skin}`" :style="vars">
     <!-- frame theme: border around the whole screen -->
     <div class="gh-deco" aria-hidden="true"><i /><i /><i /><i /></div>
+    <GaenBgEffect :effect="config.bgEffect" />
 
     <div v-if="!entered" class="gh-stage">
       <div class="gh-enter glass">

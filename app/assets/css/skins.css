@@ -17,6 +17,8 @@
 
 .mh-site {
   position: relative;
+  /* own stacking context, so the background effect layer (z-index: -1) stays above the site background */
+  isolation: isolate;
   min-height: 100dvh;
   background-color: var(--bg);
   color: var(--fg);

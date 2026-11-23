@@ -107,3 +107,12 @@ test('pin bar entries are validated, old page-name lists are upgraded', () => {
   const c = site.normalizeConfig({ pinBar: ['hello', { path: 'gallery/x', label: '그림' }, { path: '../admin' }, { path: 'admin' }] })
   assert.deepEqual(c.pinBar.map(p => ({ ...p })), [{ path: 'pages/hello', label: '' }, { path: 'gallery/x', label: '그림' }])
 })
+
+test('background effect is kept when valid and reset otherwise', () => {
+  assert.equal(site.defaultConfig().bgEffect, 'none')
+  assert.equal(site.normalizeConfig({ bgEffect: 'bubbles' }).bgEffect, 'bubbles')
+  assert.equal(site.normalizeConfig({ bgEffect: 'fireworks' }).bgEffect, 'none')
+  const c = site.defaultConfig('Jay')
+  c.bgEffect = 'notes'
+  assert.equal(site.configFromBlocks(site.configToBlocks(c), 'Jay').bgEffect, 'notes')
+})

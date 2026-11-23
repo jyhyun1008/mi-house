@@ -184,6 +184,15 @@ onBeforeRouteLeave(() => (dirty.value ? confirm('저장하지 않은 설정이 �
           </label>
         </div>
       </div>
+      <div class="mh-field">
+        <span>배경 효과</span>
+        <div class="fx-pick">
+          <label v-for="e in BG_EFFECTS" :key="e.id" class="mh-check" :title="e.desc">
+            <input v-model="draft.bgEffect" type="radio" :value="e.id"> {{ e.label }}
+          </label>
+        </div>
+        <small>어느 스킨에서나 쓸 수 있고, 강조색을 따라가요. 움직임 줄이기를 켠 방문자에게는 멈춘 채로 보여요.</small>
+      </div>
       <div class="two">
         <label class="mh-field">
           <span>본문 글꼴</span>
@@ -323,6 +332,11 @@ onBeforeRouteLeave(() => (dirty.value ? confirm('저장하지 않은 설정이 �
   margin: 12px 0 0;
   border: 1px dashed var(--border);
   padding: 8px 12px;
+}
+.fx-pick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
 }
 .skins {
   display: grid;
