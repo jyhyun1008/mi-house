@@ -25,8 +25,8 @@ const workerClap = computed(() => config.value.workerClap)
           <NuxtLink :to="path('about')" class="name"><MfmText :text="owner.name ?? owner.username" :emojis="owner.emojis" plain /></NuxtLink>
           <span class="mh-muted">@{{ owner.username }}@{{ site!.host }}</span>
         </div>
-        <SideClap v-if="workerClap || (config.guestbookNoteId && !notesOff)" :note-id="config.guestbookNoteId" bare class="clap" />
       </div>
+      <SideClap v-if="workerClap || (config.guestbookNoteId && !notesOff)" :note-id="config.guestbookNoteId" bare class="clap" />
       <SideVisitor bare />
     </section>
   </div>

@@ -290,7 +290,7 @@ onBeforeRouteLeave(() => (dirty.value ? confirm('저장하지 않은 설정이 �
       <p class="mh-muted">클립 메뉴는 공개 클립이어야 방문자에게 보여요.</p>
       <hr>
       <label class="mh-check"><input v-model="draft.hideNotesWhenLocked" type="checkbox"> 서버가 노트를 숨길 때 노트 메뉴 감추기</label>
-      <p class="mh-muted">로그인하지 않은 방문자에게 서버가 노트를 보여주지 않으면(서버 설정), 그 방문자에게는 Diary·Guestbook·Scrap 메뉴와 고정 노트, 노트 리액션 박수를 감춰요. 로그인 없는 박수와 Q&A는 남아요. 주인과 그 서버 계정으로 로그인한 사람에게는 그대로 보여요.</p>
+      <p class="mh-muted">로그인하지 않은 방문자에게 서버가 노트를 보여주지 않으면(서버 설정), 그 방문자에게는 Diary·Scrap 메뉴와 고정 노트, 노트 방명록과 노트 리액션 박수를 감춰요. 로그인 없는 박수와 Q&A가 켜져 있으면 Guestbook 메뉴는 그것만 담아서 남아요. 주인과 그 서버 계정으로 로그인한 사람에게는 그대로 보여요.</p>
     </section>
 
     <section v-show="tab === 'banner'" class="mh-box">
@@ -346,7 +346,7 @@ onBeforeRouteLeave(() => (dirty.value ? confirm('저장하지 않은 설정이 �
         <small v-else>
           <a :href="QUESDON_ORIGIN" target="_blank" rel="noopener noreferrer">네오-퀘스돈 ↗</a>에 가입한 계정이에요.
           넣으면 박수 옆 💌 한마디가 익명 질문으로 전해지고, 메뉴 → <b>Q&amp;A</b>를 추가하면 답한 질문이 올라와요.
-          저장하고 몇 분 뒤부터 반영돼요.
+          저장하고 1분쯤 뒤부터 반영돼요.
         </small>
       </label>
     </section>

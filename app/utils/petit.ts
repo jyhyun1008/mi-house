@@ -22,8 +22,8 @@ export class PetitError extends Error {
 }
 
 const PETIT_MESSAGES: Record<string, string> = {
-  CLAP_OFF: '박수가 꺼져 있어요. (설정을 바꿨다면 몇 분 뒤에 반영돼요)',
-  NO_QUESDON: '네퀘돈 계정이 설정되어 있지 않아요. (설정을 바꿨다면 몇 분 뒤에 반영돼요)',
+  CLAP_OFF: '박수가 꺼져 있어요. (설정을 바꿨다면 1분쯤 뒤에 반영돼요)',
+  NO_QUESDON: '네퀘돈 계정이 설정되어 있지 않아요. (설정을 바꿨다면 1분쯤 뒤에 반영돼요)',
   SITE_UNREACHABLE: '홈페이지 서버에 닿지 못했어요. 잠시 후에 다시 해 주세요.',
   EMPTY: '내용을 적어 주세요.',
   USER_NOT_ACCEPT_ANONYMOUS_QUESTION: '지금은 익명 질문을 받지 않아요.',

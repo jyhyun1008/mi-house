@@ -31,7 +31,7 @@ type Pin = { key: string, label: string, to: string, icon: 'link' | 'page' | 'pi
 
 const pins = computed<Pin[]>(() => {
   if (config.value.pinBar.length) {
-    return config.value.pinBar.filter(l => !(notesOff.value && isNotePath(l.path))).map(l => ({ key: l.path, label: labelOf(l.path, l.label), to: path(l.path), icon: l.path.startsWith('pages/') ? 'page' : 'link' }))
+    return config.value.pinBar.filter(l => !(notesOff.value && isNotePath(l.path) && !(l.path === 'guestbook' && (config.value.workerClap || config.value.quesdon)))).map(l => ({ key: l.path, label: labelOf(l.path, l.label), to: path(l.path), icon: l.path.startsWith('pages/') ? 'page' : 'link' }))
   }
   const pinned = owner.value.pinnedPage
   if (pinned) return [{ key: pinned.id, label: pinned.title || pinned.name, to: path(`pages/${encodeURIComponent(pinned.name)}`), icon: 'pin' }]

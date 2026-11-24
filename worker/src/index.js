@@ -82,9 +82,9 @@ function parseSite(raw) {
   return { username: m[1], host, key: `@${m[1]}@${host}` }
 }
 
-/** The homepage's own settings, read from its public config page (cached 5 minutes). */
+/** The homepage's own settings, read from its public config page (cached a minute, so changes show up soon). */
 async function siteConfig(site, ctx) {
-  const cacheKey = new Request(`https://config.cache/${encodeURIComponent(site.key)}`)
+  const cacheKey = new Request(`https://config.cache/v2/${encodeURIComponent(site.key)}`)
   const hit = await caches.default.match(cacheKey)
   if (hit) return hit.json()
 
@@ -115,7 +115,7 @@ async function siteConfig(site, ctx) {
       break
     }
   }
-  ctx.waitUntil(caches.default.put(cacheKey, new Response(JSON.stringify(config), { headers: { 'cache-control': 'public, max-age=300' } })))
+  ctx.waitUntil(caches.default.put(cacheKey, new Response(JSON.stringify(config), { headers: { 'cache-control': 'public, max-age=60' } })))
   return config
 }
 

@@ -1,6 +1,6 @@
 import type { Account } from './useAccounts'
 import type { Note, Page, UserDetailed } from '~/types/misskey'
-import type { SiteConfig } from '~/utils/site'
+import type { MenuItem, SiteConfig } from '~/utils/site'
 
 export interface SiteState {
   key: string
@@ -39,7 +39,13 @@ export function useSite() {
   /** Owner chose to hide the note-based sections while visitors can't see notes anyway. */
   const notesOff = computed(() => notesLocked.value && !!site.value?.config.hideNotesWhenLocked)
   /** Menu as this viewer sees it */
-  const menu = computed(() => (site.value?.config.menu ?? []).filter(m => !(notesOff.value && NOTE_MENU_TYPES.has(m.type))))
+  const menu = computed(() => {
+    const c = site.value?.config
+    if (!c) return []
+    // the guestbook stays when it has more than notes in it (web clap, Q&A)
+    const keep = (m: MenuItem) => !notesOff.value || !NOTE_MENU_TYPES.has(m.type) || (m.type === 'guestbook' && (c.workerClap || !!c.quesdon))
+    return c.menu.filter(keep)
+  })
 
   /** Call when the owner's note list came back empty although they have notes. */
   function markNotesHidden() {

@@ -94,10 +94,11 @@ async function ask() {
 <template>
   <component :is="props.bare ? 'div' : 'section'" :class="{ 'mh-box': !props.bare }">
     <h2 v-if="!props.bare" class="mh-box-title">Web Clap</h2>
-    <div class="mh-row">
-      <button class="mh-btn primary" :disabled="busy || done" @click="clap">👏 {{ done ? '보냄' : '박수' }}</button>
-      <span v-if="count != null" class="mh-muted">{{ count }} claps</span>
-      <button v-if="canAsk && !asking" class="mh-btn small" @click="asking = true">💌 한마디</button>
+    <div class="mh-row bar">
+      <button class="mh-btn primary" :class="{ small: props.bare }" :disabled="busy || done" @click="clap">
+        👏 {{ done ? '보냄' : '박수' }}<b v-if="count != null" class="cnt">{{ count }}</b>
+      </button>
+      <button v-if="canAsk && !asking" class="mh-btn" :class="{ small: props.bare }" @click="asking = true">💌 한마디</button>
     </div>
     <form v-if="asking" class="ask" @submit.prevent="ask">
       <textarea v-model="message" class="mh-textarea" maxlength="1000" placeholder="익명으로 한마디 (네퀘돈 질문으로 전해져요)" />
@@ -111,6 +112,17 @@ async function ask() {
 </template>
 
 <style scoped>
+.bar {
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.cnt {
+  margin-left: 6px;
+  padding-left: 6px;
+  border-left: 1px solid currentColor;
+  font-weight: 400;
+  opacity: 0.85;
+}
 .ask {
   margin-top: 6px;
 }

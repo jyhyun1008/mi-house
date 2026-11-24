@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import type { Note } from '~/types/misskey'
 
-const { site, api, current, isOwner, notesLocked, path, resolveNote, ownerIdFor } = useSite()
+const { site, api, current, isOwner, notesLocked, notesOff, path, resolveNote, ownerIdFor } = useSite()
+const config = computed(() => site.value!.config)
+/** the note-reply guestbook, unless notes are hidden from this visitor */
+const noteBook = computed(() => !!config.value.guestbookNoteId && !notesOff.value)
 const toast = useToast()
 const noteId = computed(() => site.value!.config.guestbookNoteId)
 const head = ref<Note | null>(null)
@@ -11,7 +14,7 @@ const { items, loading, done, error, more, reset } = usePaged<Note>(untilId =>
 const entries = computed(() => items.value.filter(n => n.replyId === noteId.value))
 
 onMounted(async () => {
-  if (!noteId.value) return
+  if (!noteBook.value) return
   api<Note>('notes/show', { noteId: noteId.value }).then(n => (head.value = n)).catch(() => {})
   await more()
 })
@@ -44,11 +47,18 @@ async function post() {
 <template>
   <div>
     <h1 class="mh-page-title">Guestbook</h1>
-    <div v-if="!noteId" class="mh-empty">
+    <SideClap v-if="config.workerClap" class="clap" />
+    <section v-if="config.quesdon" class="qna-part">
+      <h2 class="part-title">Q&amp;A</h2>
+      <QnaBoard />
+    </section>
+
+    <div v-if="!noteBook && !config.workerClap && !config.quesdon" class="mh-empty">
       방명록이 아직 없어요.
       <p v-if="isOwner"><NuxtLink class="mh-btn primary" :to="path('admin')">관리에서 방명록 만들기</NuxtLink></p>
     </div>
-    <template v-else>
+    <template v-else-if="noteBook">
+      <h2 v-if="config.quesdon" class="part-title">Guestbook</h2>
       <section v-if="head?.text" class="mh-box"><MfmText :text="head.text" :emojis="head.emojis" /></section>
 
       <form v-if="current" class="mh-box write" @submit.prevent="post">
@@ -77,6 +87,18 @@ async function post() {
 </template>
 
 <style scoped>
+.clap {
+  margin: 14px 0;
+}
+.qna-part {
+  margin: 14px 0 24px;
+}
+.part-title {
+  margin: 18px 0 8px;
+  color: var(--fg-strong);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+}
 .write {
   margin: 14px 0;
 }
