@@ -10,7 +10,8 @@
 | **Gallery** | 갤러리 게시물 (`users/gallery/posts`). 그 시절 비툴 커뮤 게시판처럼 테두리 썸네일 격자, Total/Page, 번호 페이지, 제목·내용 검색, 이전/다음 그림 |
 | **Scrap** / 개별 게시판 | 공개 클립 (`users/clips`, `clips/notes`): 목록형 또는 스크랩북(이미지 격자) |
 | **Guestbook** | 노트 하나에 달린 답글. 비밀글은 주인만 볼 수 있는 "지정 공개" |
-| **Web Clap** (박수) | 방명록 노트의 👏 리액션 |
+| **Web Clap** (박수) | 방명록 노트의 👏 리액션, 또는 로그인 없이 세는 박수(`api.chigoa.me`) + 💌 한마디를 네퀘돈 익명 질문으로 전달 |
+| **Q&A** | [네오-퀘스돈](https://neo-quesdon.serafuku.moe) 답변 (`api.chigoa.me`가 중계) |
 | **Diary** | 노트 (해시태그로 거를 수 있음) |
 | **About** | 프로필, 추가 정보 필드 |
 | **Page** | 페이지 하나를 메뉴로 |

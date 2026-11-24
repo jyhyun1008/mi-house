@@ -3,6 +3,8 @@
 const { site, path, notesOff } = useSite()
 const config = computed(() => site.value!.config)
 const owner = computed(() => site.value!.owner)
+/** clap counted by api.chigoa.me: no note involved, so it stays when notes are hidden */
+const workerClap = computed(() => config.value.workerClap)
 </script>
 
 <template>
@@ -23,7 +25,7 @@ const owner = computed(() => site.value!.owner)
           <NuxtLink :to="path('about')" class="name"><MfmText :text="owner.name ?? owner.username" :emojis="owner.emojis" plain /></NuxtLink>
           <span class="mh-muted">@{{ owner.username }}@{{ site!.host }}</span>
         </div>
-        <SideClap v-if="config.guestbookNoteId && !notesOff" :note-id="config.guestbookNoteId" bare class="clap" />
+        <SideClap v-if="workerClap || (config.guestbookNoteId && !notesOff)" :note-id="config.guestbookNoteId" bare class="clap" />
       </div>
       <SideVisitor bare />
     </section>

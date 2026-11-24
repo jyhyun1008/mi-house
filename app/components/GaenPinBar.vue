@@ -19,7 +19,7 @@ onMounted(async () => {
   titles.value = Object.fromEntries(got.filter((p): p is Page => !!p).map(p => [p.name, p.title || p.name]))
 })
 
-const SECTION: Record<string, string> = { pages: 'Board', gallery: 'Gallery', clips: 'Scrap', about: 'About', diary: 'Diary', guestbook: 'Guestbook' }
+const SECTION: Record<string, string> = { pages: 'Board', gallery: 'Gallery', clips: 'Scrap', about: 'About', diary: 'Diary', guestbook: 'Guestbook', qna: 'Q&A' }
 function labelOf(p: string, label: string) {
   if (label) return label
   const [section, rest] = p.split('/') as [string, string | undefined]

@@ -1,0 +1,11 @@
+name = "chigoa-api"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+
+routes = [{ pattern = "api.chigoa.me", custom_domain = true }]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "chigoa-api"
+# `wrangler d1 create chigoa-api` prints this id
+database_id = "df2654b2-304d-42b3-a5f2-57dc2acfd9f5"

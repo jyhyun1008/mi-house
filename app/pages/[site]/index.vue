@@ -11,6 +11,7 @@ const posts = ref<GalleryPost[]>([])
 const clips = ref<Clip[]>([])
 const memos = ref<Note[]>([])
 const guests = ref<Note[]>([])
+const answers = ref<QnaAnswer[]>([])
 
 onMounted(async () => {
   const userId = owner.value.id
@@ -28,6 +29,9 @@ onMounted(async () => {
         memos.value = v.filter(n => n.visibility !== 'specified' && (!c.diaryTag || n.tags?.some(t => t.toLowerCase() === c.diaryTag.toLowerCase()))).slice(0, 5)
       })
       .catch(() => {}))
+  }
+  if (c.quesdon && c.menu.some(m => m.type === 'qna')) {
+    tasks.push(petit<{ answers: QnaAnswer[] }>(`@${site.value!.key}`, 'qna').then(v => (answers.value = v.answers.slice(0, 5))).catch(() => {}))
   }
   if (c.guestbookNoteId) {
     tasks.push(api<Note[]>('notes/children', { noteId: c.guestbookNoteId, limit: 5 }).then(v => (guests.value = v.filter(n => n.replyId === c.guestbookNoteId))).catch(() => {}))
@@ -54,6 +58,7 @@ const updates = computed(() => {
     ...posts.value.map(g => ({ date: g.createdAt, kind: 'Gallery', label: g.title, to: path(`gallery/${g.id}`) })),
     ...clips.value.filter(c => c.lastClippedAt).map(c => ({ date: c.lastClippedAt!, kind: 'Scrap', label: c.name, to: path(`clips/${c.id}`) })),
     ...memos.value.map(n => ({ date: n.createdAt, kind: 'Memo', label: excerpt(n), to: path('diary') })),
+    ...answers.value.map(a => ({ date: a.answeredAt, kind: 'Q&A', label: a.question.replace(/\s+/g, ' ').slice(0, 40), to: path('qna') })),
     ...guests.value.map(n => ({ date: n.createdAt, kind: 'Guest Book', label: n.visibility === 'specified' ? '🔒 비밀글' : `${n.user.name ?? n.user.username}`, to: path('guestbook') })),
   ]
   return list.sort((a, b) => b.date.localeCompare(a.date)).slice(0, 12)
@@ -66,7 +71,7 @@ const short = (iso: string) => {
     : `${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`
 }
 
-const kindClass = (k: string) => `k-${k.split(' ')[0]!.toLowerCase()}`
+const kindClass = (k: string) => `k-${k.split(' ')[0]!.toLowerCase().replace(/[^a-z]/g, '')}`
 </script>
 
 <template>

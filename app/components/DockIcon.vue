@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PhArrowSquareOut, PhArticle, PhBookOpen, PhBookmarkSimple, PhCards, PhEnvelopeSimple, PhFeather, PhGearSix, PhHouse, PhIdentificationCard, PhImageSquare } from '@phosphor-icons/vue'
+import { PhArrowSquareOut, PhArticle, PhBookOpen, PhBookmarkSimple, PhCards, PhChatsCircle, PhEnvelopeSimple, PhFeather, PhGearSix, PhHouse, PhIdentificationCard, PhImageSquare } from '@phosphor-icons/vue'
 import type { Component } from 'vue'
 import type { MenuType, Skin } from '~/utils/site'
 
@@ -16,6 +16,7 @@ const ICONS: Record<MenuType | 'admin', Component> = {
   page: PhBookOpen,
   diary: PhFeather,
   guestbook: PhEnvelopeSimple,
+  qna: PhChatsCircle,
   link: PhArrowSquareOut,
   admin: PhGearSix,
 }

@@ -46,7 +46,7 @@ export interface PinLink {
   label: string
 }
 
-const PIN_PATH = /^(?:pages|gallery|clips|about|diary|guestbook)(?:\/[^\s?#/]+)?$/
+const PIN_PATH = /^(?:pages|gallery|clips|about|diary|guestbook|qna)(?:\/[^\s?#/]+)?$/
 
 export interface BannerItem {
   id: string
@@ -56,7 +56,7 @@ export interface BannerItem {
   label: string
 }
 
-export type MenuType = 'home' | 'about' | 'gallery' | 'pages' | 'clips' | 'clip' | 'diary' | 'guestbook' | 'page' | 'link'
+export type MenuType = 'home' | 'about' | 'gallery' | 'pages' | 'clips' | 'clip' | 'diary' | 'guestbook' | 'qna' | 'page' | 'link'
 
 export const MENU_TYPES: { type: MenuType, label: string, desc: string }[] = [
   { type: 'home', label: 'Top', desc: '첫 화면' },
@@ -68,6 +68,7 @@ export const MENU_TYPES: { type: MenuType, label: string, desc: string }[] = [
   { type: 'page', label: 'Page', desc: '페이지 하나를 메뉴로' },
   { type: 'diary', label: 'Diary', desc: '노트를 일기장처럼' },
   { type: 'guestbook', label: 'Guestbook', desc: '방명록 (노트 답글)' },
+  { type: 'qna', label: 'Q&A', desc: '네퀘돈 질문·답변' },
   { type: 'link', label: 'Link', desc: '외부 링크' },
 ]
 
@@ -149,6 +150,10 @@ export interface SiteConfig {
   /** Banners of friends' sites */
   banners: BannerItem[]
   guestbookNoteId: string
+  /** Web clap counted by api.chigoa.me instead of 👏 reactions: works without logging in */
+  workerClap: boolean
+  /** neo-quesdon account (`@user@host`) whose answers the Q&A menu shows and where clap messages go; '' = off */
+  quesdon: string
   /** When the server hides notes from visitors, hide the note-based sections (diary, guestbook, scrap, pinned notes, clap) from them */
   hideNotesWhenLocked: boolean
   /** Only notes with this hashtag show up in Diary ('' = all notes) */
@@ -192,6 +197,8 @@ export function defaultConfig(title = ''): SiteConfig {
     myBanner: '',
     banners: [],
     guestbookNoteId: '',
+    workerClap: false,
+    quesdon: '',
     hideNotesWhenLocked: false,
     diaryTag: '',
     since: '',
@@ -213,6 +220,13 @@ const NOTE_ID = /^[a-zA-Z0-9]{1,64}$/
 /** Only plain https image URLs may go into `url(...)`. */
 export function safeImageUrl(v: unknown): string {
   return typeof v === 'string' && /^https:\/\/[^\s"'()\\<>]+$/.test(v) ? v : ''
+}
+
+/** `@user@host` from what the owner typed (`user@host`, a profile URL…); '' if it isn't one. */
+export function normalizeHandle(raw: unknown): string {
+  if (typeof raw !== 'string') return ''
+  const m = /@?([a-zA-Z0-9_]{1,64})@([a-z0-9.-]+\.[a-z]{2,})\/?$/i.exec(raw.trim())
+  return m ? `@${m[1]}@${m[2]!.toLowerCase()}` : ''
 }
 
 /** Sections made of notes: empty for visitors when the server hides notes from them. */
@@ -282,6 +296,8 @@ export function normalizeConfig(raw: unknown, title = ''): SiteConfig {
         })).filter((b: BannerItem) => b.image)
       : [],
     guestbookNoteId: NOTE_ID.test(r.guestbookNoteId) ? r.guestbookNoteId : '',
+    workerClap: r.workerClap === true,
+    quesdon: normalizeHandle(r.quesdon),
     hideNotesWhenLocked: r.hideNotesWhenLocked === true,
     diaryTag: str(r.diaryTag, 100).replace(/^#/, ''),
     since: str(r.since, 40),
