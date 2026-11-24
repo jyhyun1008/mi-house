@@ -75,7 +75,7 @@ const kindClass = (k: string) => `k-${k.split(' ')[0]!.toLowerCase().replace(/[^
 </script>
 
 <template>
-  <!-- right side of the 갠홈 layout (clock, title and profile live in GaenLeft; the top menu in GaenPinBar) -->
+  <!-- right side of the 갠홈 layout (title and profile live in GaenLeft; the top menu in GaenPinBar) -->
   <div class="gh-board">
     <div class="gh-col">
       <!-- main image → profile picture → an empty frame that keeps the spot -->

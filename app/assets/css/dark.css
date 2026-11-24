@@ -142,8 +142,7 @@
 .mh-dark.theme-retro .gh-visual:not(.center) {
   background: var(--bg-box);
 }
-.mh-dark.theme-retro .gh-logo,
-.mh-dark.theme-retro .gh-clock .hm {
+.mh-dark.theme-retro .gh-logo {
   text-shadow: 3px 3px 0 var(--bg), 4px 4px 0 color-mix(in srgb, var(--accent) 40%, transparent);
 }
 

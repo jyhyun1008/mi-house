@@ -87,7 +87,7 @@ const vars = computed(() => {
   const v: Record<string, string> = { '--accent': c.accent }
   v['--font'] = FONT_STACKS[c.bodyFont]
   v['--title-font'] = FONT_STACKS[c.titleFont]
-  if (c.background) Object.assign(v, { '--site-bg': `url("${c.background}")`, '--site-bg-size': 'cover' })
+  if (c.background) Object.assign(v, { '--site-bg': `url("${c.background}")`, '--site-bg-opacity': String(c.backgroundOpacity / 100) })
   if (c.mainImage) v['--main-image'] = `url("${c.mainImage}")`
   return v
 })
@@ -159,7 +159,7 @@ const activeLabel = computed(() => {
     <div class="gh-stage"><p class="gh-loading">Now Loading…</p></div>
   </div>
 
-  <div v-else class="mh-site mh-gaen" :class="[`theme-${config.skin}`, { 'mh-dark': isDark }]" :style="vars">
+  <div v-else class="mh-site mh-gaen" :class="[`theme-${config.skin}`, { 'mh-dark': isDark, 'has-site-bg': !!config.background }]" :style="vars">
     <!-- frame theme: border around the whole screen -->
     <div class="gh-deco" aria-hidden="true"><i /><i /><i /><i /></div>
     <GaenBgEffect :effect="config.bgEffect" />

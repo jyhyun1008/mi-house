@@ -244,10 +244,15 @@ onBeforeRouteLeave(() => (dirty.value ? confirm('저장하지 않은 설정이 �
         </span>
       </div>
       <AdminImageField v-model="draft.background" label="배경 이미지" hint="화면 전체를 덮는 배경이에요. 글래스 테마에서 특히 잘 비쳐 보여요." />
+      <label v-if="draft.background" class="mh-field">
+        <span>배경 이미지 진하기</span>
+        <span class="mh-row"><input v-model.number="draft.backgroundOpacity" type="range" min="0" max="100" step="5"> <code>{{ draft.backgroundOpacity }}%</code></span>
+        <small>낮출수록 이미지가 옅어지고 스킨 배경이 비쳐 보여요.</small>
+      </label>
       <label class="mh-field">
         <span>사용자 CSS</span>
         <textarea v-model="draft.customCss" class="mh-textarea code" spellcheck="false" placeholder=".mh-title { letter-spacing: 0.5em; }" />
-        <small>사이트 안(.mh-site)에만 적용돼요. @import는 쓸 수 없어요. 클래스: .gh-dock .gh-board .gh-title .gh-logo .gh-clock .gh-latest .gh-notice .gh-profile .gh-banner .gh-visual .gh-window .gh-deco</small>
+        <small>사이트 안(.mh-site)에만 적용돼요. @import는 쓸 수 없어요. 클래스: .gh-dock .gh-board .gh-title .gh-logo .gh-latest .gh-notice .gh-profile .gh-banner .gh-visual .gh-window .gh-deco</small>
       </label>
     </section>
 

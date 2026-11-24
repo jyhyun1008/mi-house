@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/** Left column of the 갠홈 layout: title and profile stay put while the right side changes. */
+/** Left column of the 갠홈 layout: title (at the top) and profile stay put while the right side changes. */
 const { site, path, notesOff } = useSite()
 const config = computed(() => site.value!.config)
 const owner = computed(() => site.value!.owner)
@@ -9,7 +9,6 @@ const workerClap = computed(() => config.value.workerClap)
 
 <template>
   <div class="gh-left">
-    <section class="gh-w gh-clock"><GaenClock /></section>
     <section class="gh-w gh-title">
       <h1 class="gh-logo"><NuxtLink :to="path()"><MfmText :text="config.title" :emojis="owner.emojis" plain /></NuxtLink></h1>
       <p v-if="config.subtitle" class="gh-sub">{{ config.subtitle }}</p>

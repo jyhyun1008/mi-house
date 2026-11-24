@@ -135,6 +135,8 @@ export interface SiteConfig {
   accent: string
   /** https image URLs (usually from the owner's drive) */
   background: string
+  /** opacity of the background image, 0–100 (the theme background shows through) */
+  backgroundOpacity: number
   mainImage: string
   /** center: floating in the middle of the Top board; side: a tall card on the right */
   mainImageLayout: 'center' | 'side'
@@ -179,6 +181,7 @@ export function defaultConfig(title = ''): SiteConfig {
     titleFont: 'myeongjo',
     accent: '#5b7fc0',
     background: '',
+    backgroundOpacity: 100,
     mainImage: '',
     mainImageLayout: 'center',
     enter: { enabled: false, text: 'ENTER', warning: '' },
@@ -268,6 +271,7 @@ export function normalizeConfig(raw: unknown, title = ''): SiteConfig {
     titleFont: FONT_IDS.has(r.titleFont) ? r.titleFont : d.titleFont,
     accent: HEX.test(r.accent) ? r.accent : d.accent,
     background: safeImageUrl(r.background),
+    backgroundOpacity: Number.isFinite(r.backgroundOpacity) ? Math.round(Math.min(100, Math.max(0, r.backgroundOpacity))) : d.backgroundOpacity,
     mainImage: safeImageUrl(r.mainImage),
     mainImageLayout: r.mainImageLayout === 'side' ? 'side' : 'center',
     enter: {
