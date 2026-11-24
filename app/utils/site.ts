@@ -149,8 +149,8 @@ export interface SiteConfig {
   /** Banners of friends' sites */
   banners: BannerItem[]
   guestbookNoteId: string
-  /** Wavebox (or any anonymous message box) URL: lets visitors send something without logging in */
-  waveboxUrl: string
+  /** When the server hides notes from visitors, hide the note-based sections (diary, guestbook, scrap, pinned notes, clap) from them */
+  hideNotesWhenLocked: boolean
   /** Only notes with this hashtag show up in Diary ('' = all notes) */
   diaryTag: string
   since: string
@@ -192,7 +192,7 @@ export function defaultConfig(title = ''): SiteConfig {
     myBanner: '',
     banners: [],
     guestbookNoteId: '',
-    waveboxUrl: '',
+    hideNotesWhenLocked: false,
     diaryTag: '',
     since: '',
     showUpdates: true,
@@ -214,6 +214,11 @@ const NOTE_ID = /^[a-zA-Z0-9]{1,64}$/
 export function safeImageUrl(v: unknown): string {
   return typeof v === 'string' && /^https:\/\/[^\s"'()\\<>]+$/.test(v) ? v : ''
 }
+
+/** Sections made of notes: empty for visitors when the server hides notes from them. */
+export const NOTE_MENU_TYPES = new Set<MenuType>(['diary', 'guestbook', 'clips', 'clip'])
+const NOTE_PATH = /^(?:diary|guestbook|clips)(?:\/|$)/
+export const isNotePath = (p: string) => NOTE_PATH.test(p)
 
 /** Old default menu names (pages were "Text", clips were "Board") → the current ones; custom names stay. */
 function renamedLabel(type: string, label: string) {
@@ -277,7 +282,7 @@ export function normalizeConfig(raw: unknown, title = ''): SiteConfig {
         })).filter((b: BannerItem) => b.image)
       : [],
     guestbookNoteId: NOTE_ID.test(r.guestbookNoteId) ? r.guestbookNoteId : '',
-    waveboxUrl: safeHttpUrl(str(r.waveboxUrl, 500)) ?? '',
+    hideNotesWhenLocked: r.hideNotesWhenLocked === true,
     diaryTag: str(r.diaryTag, 100).replace(/^#/, ''),
     since: str(r.since, 40),
     showUpdates: r.showUpdates !== false,

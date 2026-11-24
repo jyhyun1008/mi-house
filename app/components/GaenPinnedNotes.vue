@@ -3,7 +3,7 @@ import { PhQuotes } from '@phosphor-icons/vue'
 import type { Note } from '~/types/misskey'
 
 /** Notes pinned on the Misskey profile, listed under Latest; each opens in a popup. */
-const { site } = useSite()
+const { site, notesOff } = useSite()
 const notes = computed(() => (site.value!.owner.pinnedNotes ?? []).slice(0, 5))
 const opened = ref<Note | null>(null)
 
@@ -13,7 +13,7 @@ const label = (n: Note) => n.isHidden ? `🔒 ${new Date(n.createdAt).toLocaleDa
 </script>
 
 <template>
-  <section v-if="notes.length" class="gh-w gh-pinned glass">
+  <section v-if="notes.length && !notesOff" class="gh-w gh-pinned glass">
     <h2 class="gh-h">Pinned</h2>
     <ul class="gh-pinned-list">
       <li v-for="n in notes" :key="n.id">

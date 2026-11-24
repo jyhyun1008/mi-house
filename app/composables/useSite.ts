@@ -36,9 +36,21 @@ export function useSite() {
     if (!st || local.value || !st.owner.notesCount) return false
     return notesHiddenFor.value === st.key || !!st.owner.pinnedNotes?.some(n => n.isHidden)
   })
+  /** Owner chose to hide the note-based sections while visitors can't see notes anyway. */
+  const notesOff = computed(() => notesLocked.value && !!site.value?.config.hideNotesWhenLocked)
+  /** Menu as this viewer sees it */
+  const menu = computed(() => (site.value?.config.menu ?? []).filter(m => !(notesOff.value && NOTE_MENU_TYPES.has(m.type))))
+
   /** Call when the owner's note list came back empty although they have notes. */
   function markNotesHidden() {
     if (site.value && !local.value && site.value.owner.notesCount > 0) notesHiddenFor.value = site.value.key
+  }
+  /** Ask once whether notes come through for this viewer (when nothing pinned already told us). */
+  async function probeNotes() {
+    const st = site.value
+    if (!st || local.value || notesLocked.value || !st.owner.notesCount) return
+    const got = await api<unknown[]>('users/notes', { userId: st.owner.id, limit: 1 }).catch(() => null)
+    if (got && !got.length) markNotesHidden()
   }
 
   function s() {
@@ -105,7 +117,7 @@ export function useSite() {
     st.config = normalizeConfig(JSON.parse(JSON.stringify(config)), st.owner.name ?? st.username)
   }
 
-  return { site, skin, local, current, isOwner, notesLocked, markNotesHidden, api, ownerApi, path, resolveNote, ownerIdFor, saveConfig }
+  return { site, skin, local, current, isOwner, notesLocked, notesOff, menu, markNotesHidden, probeNotes, api, ownerApi, path, resolveNote, ownerIdFor, saveConfig }
 }
 
 /** Fetch owner + settings for `@username@host`. */

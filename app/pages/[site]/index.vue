@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Clip, GalleryPost, Note, Page } from '~/types/misskey'
 
-const { site, api, path, isOwner, notesLocked, markNotesHidden } = useSite()
+const { site, api, path, isOwner, notesLocked, notesOff, markNotesHidden } = useSite()
 const config = computed(() => site.value!.config)
 const owner = computed(() => site.value!.owner)
 
@@ -104,7 +104,7 @@ const kindClass = (k: string) => `k-${k.split(' ')[0]!.toLowerCase()}`
           </li>
         </ul>
         <p v-else-if="!notesLocked" class="mh-muted">아직 소식이 없어요.</p>
-        <LockedNotes v-if="notesLocked" small />
+        <LockedNotes v-if="notesLocked && !notesOff" small />
       </section>
 
       <GaenPinnedNotes />

@@ -334,10 +334,8 @@ onBeforeRouteLeave(() => (dirty.value ? confirm('저장하지 않은 설정이 �
         </label>
       </template>
       <hr>
-      <label class="mh-field"><span>Wavebox 주소 (선택)</span>
-        <input v-model.trim="draft.waveboxUrl" class="mh-input" placeholder="https://wavebox.me/wave/…">
-      </label>
-      <p class="mh-muted">넣으면 프로필의 박수 옆과 방명록에 💌 버튼이 생겨요. 로그인하지 않은 방문자도 이모지나 메시지를 익명으로 보낼 수 있어요.</p>
+      <label class="mh-check"><input v-model="draft.hideNotesWhenLocked" type="checkbox"> 서버가 노트를 숨길 때 노트 메뉴 감추기</label>
+      <p class="mh-muted">로그인하지 않은 방문자에게 서버가 노트를 보여주지 않으면(서버 설정), 그 방문자에게는 Diary·Guestbook·Scrap 메뉴와 고정 노트, 박수를 감춰요. 주인과 그 서버 계정으로 로그인한 사람에게는 그대로 보여요.</p>
     </section>
 
     <section v-show="tab === 'domain'" class="mh-box domain">

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /** Left column of the 갠홈 layout: title and profile stay put while the right side changes. */
-const { site, path } = useSite()
+const { site, path, notesOff } = useSite()
 const config = computed(() => site.value!.config)
 const owner = computed(() => site.value!.owner)
 </script>
@@ -23,7 +23,7 @@ const owner = computed(() => site.value!.owner)
           <NuxtLink :to="path('about')" class="name"><MfmText :text="owner.name ?? owner.username" :emojis="owner.emojis" plain /></NuxtLink>
           <span class="mh-muted">@{{ owner.username }}@{{ site!.host }}</span>
         </div>
-        <SideClap v-if="config.guestbookNoteId || config.waveboxUrl" :note-id="config.guestbookNoteId" bare class="clap" />
+        <SideClap v-if="config.guestbookNoteId && !notesOff" :note-id="config.guestbookNoteId" bare class="clap" />
       </div>
       <SideVisitor bare />
     </section>

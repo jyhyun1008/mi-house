@@ -7,7 +7,7 @@ import type { MenuItem } from '~/utils/site'
  * Pin bar above the main image: links the owner entered (places inside this site).
  * Without any, the page pinned on the Misskey profile, then the menu entries stand in.
  */
-const { site, api, path } = useSite()
+const { site, api, path, menu, notesOff } = useSite()
 const config = computed(() => site.value!.config)
 const owner = computed(() => site.value!.owner)
 
@@ -31,11 +31,11 @@ type Pin = { key: string, label: string, to: string, icon: 'link' | 'page' | 'pi
 
 const pins = computed<Pin[]>(() => {
   if (config.value.pinBar.length) {
-    return config.value.pinBar.map(l => ({ key: l.path, label: labelOf(l.path, l.label), to: path(l.path), icon: l.path.startsWith('pages/') ? 'page' : 'link' }))
+    return config.value.pinBar.filter(l => !(notesOff.value && isNotePath(l.path))).map(l => ({ key: l.path, label: labelOf(l.path, l.label), to: path(l.path), icon: l.path.startsWith('pages/') ? 'page' : 'link' }))
   }
   const pinned = owner.value.pinnedPage
   if (pinned) return [{ key: pinned.id, label: pinned.title || pinned.name, to: path(`pages/${encodeURIComponent(pinned.name)}`), icon: 'pin' }]
-  return config.value.menu.filter(m => m.type !== 'home' && m.type !== 'link').slice(0, 4).map(m => ({
+  return menu.value.filter(m => m.type !== 'home' && m.type !== 'link').slice(0, 4).map(m => ({
     key: m.id,
     label: m.label,
     to: m.type === 'clip' ? path(`clips/${m.clipId ?? ''}`) : m.type === 'page' ? path(`pages/${encodeURIComponent(m.pageName ?? '')}`) : path(m.type),

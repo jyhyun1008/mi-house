@@ -2,7 +2,9 @@
 import type { MenuItem } from '~/utils/site'
 
 const route = useRoute()
-const { site, skin, current, isOwner, path } = useSite()
+const { site, skin, current, isOwner, path, menu, probeNotes } = useSite()
+// hide the note sections as soon as we know the server keeps notes from this visitor
+watch(() => site.value?.key, k => k && site.value!.config.hideNotesWhenLocked && probeNotes(), { immediate: true })
 const { accounts } = useAccounts()
 
 // on a custom domain the domain says whose homepage this is (see utils/domain.ts)
@@ -177,7 +179,7 @@ const activeLabel = computed(() => {
     <template v-else>
       <nav class="mh-nav gh-dock" aria-label="메뉴">
         <ul>
-          <li v-for="m in config.menu" :key="m.id">
+          <li v-for="m in menu" :key="m.id">
             <a v-if="m.type === 'link'" :href="safeHttpUrl(m.url)" target="_blank" rel="noopener noreferrer" :title="m.label"><span class="ic"><DockIcon :type="m.type" :skin="config.skin" /></span><span class="lb">{{ m.label }}</span></a>
             <NuxtLink v-else :to="menuTo(m)" :class="{ 'mh-on': isActive(m) }" :title="m.label"><span class="ic"><DockIcon :type="m.type" :skin="config.skin" /></span><span class="lb">{{ m.label }}</span></NuxtLink>
           </li>
