@@ -3,15 +3,13 @@ import type { Note } from '~/types/misskey'
 
 /** Web clap (拍手): a 👏 reaction on the guestbook note. One per visitor, as Misskey allows. */
 const props = defineProps<{ noteId: string, bare?: boolean }>()
-const { site, api, current, resolveNote } = useSite()
-const wavebox = computed(() => site.value?.config.waveboxUrl ?? '')
+const { api, current, resolveNote } = useSite()
 const toast = useToast()
 const count = ref<number | null>(null)
 const busy = ref(false)
 const done = ref(false)
 
 onMounted(async () => {
-  if (!props.noteId) return
   try {
     const n = await api<Note>('notes/show', { noteId: props.noteId })
     count.value = Object.values(n.reactions).reduce((a, b) => a + b, 0)
@@ -47,11 +45,8 @@ async function clap() {
   <component :is="props.bare ? 'div' : 'section'" :class="{ 'mh-box': !props.bare }">
     <h2 v-if="!props.bare" class="mh-box-title">Web Clap</h2>
     <div class="mh-row">
-      <template v-if="props.noteId">
-        <button class="mh-btn primary" :disabled="busy || done" @click="clap">👏 {{ done ? '보냄' : '박수' }}</button>
-        <span v-if="count != null" class="mh-muted">{{ count }} claps</span>
-      </template>
-      <a v-if="wavebox" class="mh-btn" :href="wavebox" target="_blank" rel="noopener noreferrer" title="로그인 없이 익명으로 보내기">💌 Wavebox</a>
+      <button class="mh-btn primary" :disabled="busy || done" @click="clap">👏 {{ done ? '보냄' : '박수' }}</button>
+      <span v-if="count != null" class="mh-muted">{{ count }} claps</span>
     </div>
   </component>
 </template>
