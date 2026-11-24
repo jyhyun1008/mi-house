@@ -41,6 +41,8 @@ export async function petit<T>(site: string, route: 'clap' | 'ask' | 'qna', init
     headers: post ? { 'content-type': 'application/json' } : undefined,
     body: post ? JSON.stringify({ ...init.body, site }) : undefined,
     credentials: 'omit',
+    // the Worker keeps its own short cache; a copy kept by the browser would hide new answers
+    cache: 'no-store',
     referrerPolicy: 'no-referrer',
     signal: AbortSignal.timeout(20_000),
   })

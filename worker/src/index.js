@@ -165,13 +165,16 @@ async function ask(quesdon, question, request) {
   throw new Fail(err?.error_type || `QUESDON_${res.status}`, res.status === 429 ? 429 : res.status === 403 ? 403 : 502)
 }
 
-/** answered questions, cached 5 minutes */
+/**
+ * Answered questions. The edge keeps a copy for a minute (never an empty list, so a first
+ * answer shows up right away); browsers always ask again, so they never hold a stale list.
+ */
 async function answers(quesdon, untilId, ctx) {
   const target = `${QUESDON_ORIGIN}/api/db/answers/${encodeURIComponent(quesdon)}?limit=20&sort=DESC`
     + (/^[a-z0-9]{1,64}$/i.test(untilId ?? '') ? `&untilId=${untilId}` : '')
-  const cacheKey = new Request(target)
+  const cacheKey = new Request(`https://answers.cache/v2/${encodeURIComponent(target)}`)
   const hit = await caches.default.match(cacheKey)
-  if (hit) return hit
+  if (hit) return json(await hit.json())
   const up = await fetch(target, { signal: AbortSignal.timeout(15_000) })
   if (!up.ok) throw new Fail(`QUESDON_${up.status}`, 502)
   const data = await up.json()
@@ -182,7 +185,8 @@ async function answers(quesdon, untilId, ctx) {
     answeredAt: a.answeredAt,
     nsfwedAnswer: !!a.nsfwedAnswer,
   }))
-  const res = json({ answers: list }, 200, 'public, max-age=300')
-  ctx.waitUntil(caches.default.put(cacheKey, res.clone()))
-  return res
+  if (list.length) {
+    ctx.waitUntil(caches.default.put(cacheKey, new Response(JSON.stringify({ answers: list }), { headers: { 'cache-control': 'public, max-age=60' } })))
+  }
+  return json({ answers: list })
 }

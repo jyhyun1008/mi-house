@@ -8,7 +8,7 @@
 | `GET /clap?site=@user@host` | 박수 수 |
 | `POST /clap` `{ site }` | 박수 +1 (같은 사람은 한 시간에 한 번) |
 | `POST /ask` `{ site, question }` | 주인에게 네퀘돈 익명 질문 보내기 |
-| `GET /qna?site=@user@host&untilId=` | 주인이 네퀘돈에서 답한 질문 (5분 캐시) |
+| `GET /qna?site=@user@host&untilId=` | 주인이 네퀘돈에서 답한 질문 (엣지 1분 캐시, 빈 목록은 캐시 안 함) |
 
 각 홈페이지의 설정은 그 홈페이지의 공개 `mi-house` 페이지에서 읽어요. 읽은 설정은 1분 동안 캐시하고,
 주인이 켜 둔 기능(`workerClap`, `quesdon`)만 해요.
